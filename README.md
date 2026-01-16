@@ -7,10 +7,16 @@ SINPEConectaCR es una plataforma inteligente para PYMES en Costa Rica que conect
 **Rol:** Software Developer | IA aplicada a PYMES  
 **País:** Costa Rica 🇨🇷  
 
-> ⚠️ **Proyecto de personal branding.**  
+> ⚠️ **Proyecto de personal branding y Open Source.**  
 > Diseñado para demostrar arquitectura moderna, integración con WhatsApp, automatización de pagos SINPE y uso práctico de IA en contextos reales de PYMES.
 
-![alt text](https://github.com/dorianprogrammer/SINPEConectaCR/blob/main/SINPEConectaCR.png?raw=true)
+<p align="center">
+  <img 
+    src="https://github.com/dorianprogrammer/SINPEConectaCR/blob/main/SINPEConectaCR.png?raw=true"
+    alt="SINPEConectaCR Banner"
+    width="900"
+  />
+</p>
 
 ## 🌍 Open Source Statement
 
