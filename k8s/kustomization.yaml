@@ -1,0 +1,18 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: sinpeconectacr
+
+resources:
+  - 00-namespace.yaml
+  - 01-configmap.yaml
+  - 02-postgres.yaml
+  - 03-redis.yaml
+  - 04-nats.yaml
+  - 10-api-gateway.yaml
+  - 11-auth-service.yaml
+  - 12-payments-service.yaml
+  - 13-crm-service.yaml
+  - 14-ia-service.yaml
+  - 20-frontend.yaml
+  - 30-ingress.yaml

@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crm-service
+  namespace: sinpeconectacr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: crm-service
+  template:
+    metadata:
+      labels:
+        app: crm-service
+    spec:
+      containers:
+        - name: crm-service
+          image: dorianprogrammer/crm-service:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3003
+          env:
+            - name: PORT
+              value: "3003"
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: sinpeconectacr-config
+                  key: DATABASE_URL
+            - name: NATS_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: sinpeconectacr-config
+                  key: NATS_URL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: crm-service
+  namespace: sinpeconectacr
+spec:
+  selector:
+    app: crm-service
+  ports:
+    - port: 3003
+      targetPort: 3003

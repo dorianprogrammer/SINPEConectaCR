@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payments-service
+  namespace: sinpeconectacr
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payments-service
+  template:
+    metadata:
+      labels:
+        app: payments-service
+    spec:
+      containers:
+        - name: payments-service
+          image: dorianprogrammer/payments-service:local
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 3002
+          env:
+            - name: PORT
+              value: "3002"
+            - name: DATABASE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: sinpeconectacr-config
+                  key: DATABASE_URL
+            - name: REDIS_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: sinpeconectacr-config
+                  key: REDIS_URL
+            - name: NATS_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: sinpeconectacr-config
+                  key: NATS_URL
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payments-service
+  namespace: sinpeconectacr
+spec:
+  selector:
+    app: payments-service
+  ports:
+    - port: 3002
+      targetPort: 3002
