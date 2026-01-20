@@ -1,7 +1,12 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
+import authRoutes from './routes/auth.routes';
 import express from 'express';
 
 const app = express();
 app.use(express.json({ limit: '2mb' }));
+app.set('trust proxy', true);
 
 app.get('/health', (_req, res) => {
   res.status(200).json({
@@ -11,7 +16,8 @@ app.get('/health', (_req, res) => {
   });
 });
 
-// placeholder route (optional)
+app.use('/auth', authRoutes);
+
 app.get('/', (_req, res) => {
   res.status(200).json({ ok: true, message: 'auth-service running' });
 });
