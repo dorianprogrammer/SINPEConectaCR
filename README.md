@@ -50,7 +50,7 @@ SINPEConectaCR/
 │
 ├─ frontend/
 │
-├─ docker/
+├─ k8s/
 │
 ├─ docs/
 │   ├─ architecture/
