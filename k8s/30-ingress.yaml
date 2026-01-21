@@ -4,19 +4,15 @@ metadata:
   name: sinpeconectacr-ingress
   namespace: sinpeconectacr
   annotations:
-    nginx.ingress.kubernetes.io/use-regex: "true"
     nginx.ingress.kubernetes.io/proxy-connect-timeout: "60"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
-    kubernetes.io/ingress.class: nginx
-    nginx.ingress.kubernetes.io/rewrite-target: /$2
 spec:
   ingressClassName: nginx
   rules:
     - host: sinpeconectacr.local
       http:
         paths:
-          # APIs -> api-gateway
           - path: /health
             pathType: Prefix
             backend:
@@ -25,39 +21,38 @@ spec:
                 port:
                   number: 3000
 
-          - path: /auth(/|$)(.*)
-            pathType: ImplementationSpecific
+          - path: /auth
+            pathType: Prefix
             backend:
               service:
                 name: api-gateway
                 port:
                   number: 3000
 
-          - path: /payments(/|$)(.*)
-            pathType: ImplementationSpecific
+          - path: /payments
+            pathType: Prefix
             backend:
               service:
                 name: api-gateway
                 port:
                   number: 3000
 
-          - path: /crm(/|$)(.*)
-            pathType: ImplementationSpecific
+          - path: /crm
+            pathType: Prefix
             backend:
               service:
                 name: api-gateway
                 port:
                   number: 3000
 
-          - path: /ia(/|$)(.*)
-            pathType: ImplementationSpecific
+          - path: /ia
+            pathType: Prefix
             backend:
               service:
                 name: api-gateway
                 port:
                   number: 3000
 
-          # Everything else -> frontend
           - path: /
             pathType: Prefix
             backend:

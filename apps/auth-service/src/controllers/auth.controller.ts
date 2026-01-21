@@ -8,7 +8,7 @@ export const register = async (req: Request, res: Response) => {
     const result = await authService.register(req.body, { ip, userAgent });
     res.status(201).json(result);
   } catch (error: any) {
-    console.log('error', error)
+    console.log('error', error);
     res.status(400).json({
       message: error.message || 'Registration failed',
     });
@@ -16,7 +16,6 @@ export const register = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
-    console.log('controller: login hit', req.body);
   try {
     const ip = req.ip;
     const userAgent = req.headers['user-agent'];

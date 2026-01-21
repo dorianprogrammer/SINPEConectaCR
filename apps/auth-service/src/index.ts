@@ -1,7 +1,7 @@
 import dotenv from 'dotenv';
 dotenv.config();
 
-import authRoutes from './routes/auth.routes.js'
+import authRoutes from './routes/auth.routes.js';
 import express from 'express';
 
 const app = express();
@@ -16,7 +16,7 @@ app.get('/health', (_req, res) => {
   });
 });
 
-app.use('/auth', authRoutes);
+app.use(authRoutes);
 
 app.get('/', (_req, res) => {
   res.status(200).json({ ok: true, message: 'auth-service running' });

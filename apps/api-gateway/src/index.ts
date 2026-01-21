@@ -37,7 +37,7 @@ const targets = {
 app.use(
   '/auth',
   proxy(targets.auth, {
-    proxyReqPathResolver: (req) => `/auth${req.url}`,
+    proxyReqPathResolver: (req) => req.url,
   }),
 );
 app.use(
