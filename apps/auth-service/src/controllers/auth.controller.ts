@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import * as authService from '../services/auth.service';
+import * as authService from '../services/auth.service.js';
 
 export const register = async (req: Request, res: Response) => {
   try {
@@ -16,6 +16,7 @@ export const register = async (req: Request, res: Response) => {
 };
 
 export const login = async (req: Request, res: Response) => {
+    console.log('controller: login hit', req.body);
   try {
     const ip = req.ip;
     const userAgent = req.headers['user-agent'];

@@ -1,5 +1,8 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
 import express from 'express';
-import { createProxyMiddleware } from 'http-proxy-middleware';
+import proxy from 'express-http-proxy';
 import cors from 'cors';
 
 const app = express();
@@ -33,37 +36,28 @@ const targets = {
 // --- proxies ---
 app.use(
   '/auth',
-  createProxyMiddleware({
-    target: targets.auth,
-    changeOrigin: true,
-    pathRewrite: { '^/auth': '' },
+  proxy(targets.auth, {
+    proxyReqPathResolver: (req) => `/auth${req.url}`,
   }),
 );
-
 app.use(
   '/payments',
-  createProxyMiddleware({
-    target: targets.payments,
-    changeOrigin: true,
-    pathRewrite: { '^/payments': '' },
+  proxy(targets.payments, {
+    proxyReqPathResolver: (req) => `/payments${req.url}`,
   }),
 );
 
 app.use(
   '/crm',
-  createProxyMiddleware({
-    target: targets.crm,
-    changeOrigin: true,
-    pathRewrite: { '^/crm': '' },
+  proxy(targets.crm, {
+    proxyReqPathResolver: (req) => `/crm${req.url}`,
   }),
 );
 
 app.use(
   '/ia',
-  createProxyMiddleware({
-    target: targets.ia,
-    changeOrigin: true,
-    pathRewrite: { '^/ia': '' },
+  proxy(targets.ia, {
+    proxyReqPathResolver: (req) => `/ia${req.url}`,
   }),
 );
 

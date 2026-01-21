@@ -1,6 +1,6 @@
-import { RegisterDTO, LoginDTO, JwtPayload } from '../types/auth.types';
-import { signToken } from '../utils/jwt.util';
-import { executeSP } from '../db/sp.util';
+import { RegisterDTO, LoginDTO, JwtPayload } from '../types/auth.types.js';
+import { signToken } from '../utils/jwt.util.js';
+import { executeSP } from '../db/sp.util.js';
 
 export const register = async (
   data: RegisterDTO,
@@ -17,7 +17,7 @@ export const register = async (
 
   const user = result.rows[0];
 
-  console.log('user', user)
+  console.log('user', user);
 
   const payload: JwtPayload = {
     sub: user.user_id,
@@ -37,6 +37,8 @@ export const register = async (
 };
 
 export const login = async (data: LoginDTO, context?: { ip?: string; userAgent?: string }) => {
+  console.log('1. login started:', data.email);
+
   const result = await executeSP('SP_AUTH_LOGIN', [
     data.email,
     data.password,
@@ -44,11 +46,14 @@ export const login = async (data: LoginDTO, context?: { ip?: string; userAgent?:
     context?.userAgent,
   ]);
 
+  console.log('2. SP returned:', result.rowCount);
+
   if (result.rowCount === 0) {
     throw new Error('Invalid credentials');
   }
 
   const user = result.rows[0];
+  console.log('3. user:', user);
 
   const payload: JwtPayload = {
     sub: user.user_id,

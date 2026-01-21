@@ -1,4 +1,4 @@
-import { pool } from './db.util'
+import { pool } from './db.util.js'
 
 export const executeQuery = async (
   query: string,
