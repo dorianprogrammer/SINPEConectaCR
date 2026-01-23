@@ -2,94 +2,77 @@
 
 ## Introducción
 
-La siguiente estrategia define una forma estructurada de trabajar con las ramas en un repositorio de GitHub. Este enfoque busca optimizar la colaboración entre desarrolladores, asegurar la estabilidad del código funcional y permitir una integración controlada en el entorno de producción.
-
-Esta metodología está inspirada en prácticas adoptadas en proyectos como IAM, donde se establece una estructura clara y jerárquica para la gestión de ramas.
+La siguiente estrategia define una forma estructurada de trabajar con las ramas en un repositorio de GitHub. Este enfoque optimiza la colaboración entre desarrolladores, garantiza la estabilidad del código funcional y facilita una integración controlada en producción.
 
 ## Estructura de las Ramas
 
 ### Rama Main (`main`)
-La rama `main` es la base del repositorio. Está destinada al código estable y listo para producción. Solo debe recibir actualizaciones desde la rama `producción` después de que se hayan realizado pruebas exhaustivas.
+La rama `main` contiene código estable y listo para producción. Solo recibe actualizaciones desde la rama `producción` después de pruebas exhaustivas.
 
 **Utilización:**  
 - Exclusivamente para lanzamientos a producción.  
-- Protegida contra implementaciones directas para evitar sobrescrituras accidentales.
+- Protegida contra sobrescrituras accidentales.
 
 ---
 
 ### Rama Producción (`producción`)
-La rama `producción` sirve como un puente entre las ramas `main` y `dev`. Recibe código desde `dev` una vez que este ha sido aprobado y probado. Su propósito es preparar el código estable para su despliegue.
+La rama `producción` sirve de puente entre `main` y `development-vx.x.x`. Recibe código desde `development-vx.x.x` aprobado mediante pruebas de integración. Prepara el código para despliegues definitivos.
 
 **Utilización:**  
-- Para pruebas en el entorno de pre-producción.  
-- Plataforma para validaciones finales antes de ser fusionada en `main`.
+- Para pruebas finales en un entorno de pre-producción.  
+- Plataforma para validación antes de fusionarse con `main`.
 
 ---
 
-### Rama de Desarrollo (`dev`)
-La rama `dev` almacena la integración de todo el código funcional y aprobado por el equipo. Es el punto de encuentro para las contribuciones de distintas ramas de desarrollo individuales.
+### Rama de Desarrollo por Versión (`development-vx.x.x`)
+Cada versión importante tiene una rama de desarrollo específica (`development-vx.x.x`). Servirá como la base para todos los trabajos relacionados con esa versión.
 
 **Utilización:**  
-- Ideal para pruebas de integración a nivel grupal.  
-- Recibe Pull Requests (PRs) desde ramas específicas pertenecientes a desarrolladores o funcionalidades.
+- Al incrementar una versión, se crea una nueva rama `development-vx.x.x` como el punto principal de interacción.  
+- Las ramas personalizadas de colaboradores derivan de esta rama.
+
+**Nota:**  
+La nueva rama creada (`development-vx.x.x`) debe configurarse como la rama por defecto del repositorio.
 
 ---
 
-### Ramas de Desarrolladores o Funcionalidades
-Cada desarrollador trabaja en una rama personalizada derivada de `dev`. Estas ramas se nombran siguiendo el formato `dev-vx.x.x-nameDev1`, donde:
-- `vx.x.x` corresponde a la versión con la cual está vinculada.
-- `nameDev1` hace referencia al desarrollador responsable.
+### Ramas de Colaboradores
+Cada desarrollador trabaja en su rama personalizada derivada de `development-vx.x.x`. El formato del nombre sigue `dev-vx.x.x-NombreColaborador`.
 
 Ejemplo:  
 - `dev-v1.0.7-David`  
 - `dev-v1.0.7-Dorian`
 
 **Utilización:**  
-- Espacio aislado para desarrollo por desarrollador o funcionalidad.  
-- Los cambios se envían a `dev` mediante PRs para revisión y pruebas.
+- Espacio aislado para desarrollar nuevas funcionalidades.  
+- Los cambios se envían a la rama `development-vx.x.x` mediante Pull Requests (PRs).
 
 ---
 
 ### Ramas de Respaldo y Restauración
-En proyectos complejos, las ramas de respaldo (`bkp-*`) y restauración (`reset-*`) aseguran la integridad del código, permitiendo restaurar versiones anteriores cuando se requiera.
+Ramas de respaldo (`bkp-*`) y restauración (`reset-*`) aseguran la integridad y disponibilidad de versiones adicionales.
 
 Ejemplo:  
-- `bkp-dev-v1.0.7`  
-- `reset-dev-v1.0.6`
+- `bkp-development-v1.0.7`  
+- `reset-development-v1.0.6`
 
 **Utilización:**  
-- Respaldo de puntos específicos en el desarrollo.  
-- Restauración ante problemas mayores o cambios irreversibles.
+- Para restaurar estados previos o proteger entregas importantes.  
+- Ante problemas mayores, sirven para volver a puntos funcionales.
 
 ---
 
-## Beneficios de la Estrategia
-
-### 1. Mejora en la Colaboración
-El uso de ramas aisladas por desarrollador permite que todo el equipo pueda trabajar simultáneamente sin conflictos de código.
-
-### 2. Garantía de Estabilidad
-Solo el código probado y aprobado fluye hacia ramas superiores como `dev`, `producción` y `main`. Esto protege los entornos productivos y asegura la estabilidad.
-
-### 3. Control de Versiones
-Los nombres explícitos de las ramas permiten identificar rápidamente la función y el propietario de cada desarrollo, además de respaldar un seguimiento histórico claro.
-
-### 4. Integración Controlada
-Los Pull Requests actúan como puntos de control que permiten a los revisores inspeccionar, aprobar y fusionar cambios con calidad garantizada.
-
----
-
-## Representación en Diagrama
+## Representación en Diagrama de Estrategia
 
 ```mermaid
 graph TD
     A[main]
     B[producción]
-    C[dev]
+    C[development-v1.0.7]
     D1[dev-v1.0.7-David]
     D2[dev-v1.0.7-Dorian]
-    E1[reset-dev-v1.0.7]
-    E2[bkp-dev-v1.0.6]
+    E1[reset-development-v1.0.7]
+    E2[bkp-development-v1.0.6]
 
     A <-- B
     B --> C
@@ -101,25 +84,48 @@ graph TD
 
 ---
 
+## Representación en Diagrama de Manejo de Versiones
+
+El siguiente diagrama muestra el proceso de incrementación de una versión y cómo se adaptan las ramas:
+
+```mermaid
+graph TD
+    A[development-v1.0.6]
+    B[dev-v1.0.6-David]
+    C[dev-v1.0.6-Dorian]
+    D[producción]
+    E[main]
+    F[development-v1.0.7]
+
+    A --> B
+    A --> C
+    B --> A
+    C --> A
+    A --> D
+    D --> E
+    B -.nuevo PR desde rama dev.-> F
+    C -.nuevo PR desde rama dev.-> F
+    F -.configuración como nueva rama por defecto.-> D
+    F -.actualización de colaboradores.-> B
+```
+
+---
+
 ## Ejemplo de Flujo de Trabajo
 
-1. **Flujo de Desarrollador**:  
-   - Trabajan en su rama personalizada (ejemplo: `dev-v1.0.7-David`).  
-   - Una vez terminado el desarrollo, se envía un Pull Request hacia `dev`.  
-   - Tras pruebas, el código se integra a `dev`.
+### Creación de una Nueva Versión:
 
-2. **Flujo de Release**:  
-   - El código integrado en `dev` pasa a `producción`.  
-   - Después de validaciones finales, se fusiona con `main` para su despliegue.
+1. Cuando se requiere una nueva versión (por ejemplo, de `v1.0.6` a `v1.0.7`), se realiza lo siguiente:
+   - Crear una nueva rama `development-v1.0.7`.
+   - Configurar esta nueva rama como la rama por defecto del repositorio.
 
-3. **Versionado y Respaldo**:  
-   - Las ramas `bkp-*` contienen momentos históricos del desarrollo.  
-   - Las ramas `reset-*` están disponibles para revertir el código en caso necesario.
+2. Actualización de los colaboradores:
+   - Todas las ramas individuales (`dev-vx.x.x-NombreColaborador`) deben derivarse de la nueva rama `development-vx.x.x` y vincularse al trabajo de la versión actual.
 
 ---
 
 ## Justificación de la Estrategia
 
-- **Organización:** Separar las ramas por desarrollador, función y propósito permite un flujo de trabajo ordenado y altamente colaborativo.  
-- **Fiabilidad:** Las pruebas en cada nivel de las ramas garantizan un entorno seguro y confiable para producción.  
-- **Escalabilidad:** Este enfoque es flexible y puede soportar proyectos pequeños o grandes sin comprometer la calidad del código.
+- **Organización:** La separación de ramas por propósito, versión y colaborador simplifica el trabajo colaborativo.  
+- **Fiabilidad:** Las validaciones jerárquicas minimizan riesgos en producción.  
+- **Escalabilidad:** Este enfoque es adaptable a proyectos pequeños y grandes, manteniendo la calidad del código.
