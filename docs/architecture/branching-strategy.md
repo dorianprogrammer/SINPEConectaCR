@@ -123,8 +123,3 @@ graph TD
 - **Organización:** Separar las ramas por desarrollador, función y propósito permite un flujo de trabajo ordenado y altamente colaborativo.  
 - **Fiabilidad:** Las pruebas en cada nivel de las ramas garantizan un entorno seguro y confiable para producción.  
 - **Escalabilidad:** Este enfoque es flexible y puede soportar proyectos pequeños o grandes sin comprometer la calidad del código.
-
-**Referencia:**  
-Este modelo de trabajo refleja el esquema utilizado en proyectos como IAM, ilustrado claramente en la siguiente imagen:
-
-![Ejemplo de Ramas IAM](image1)
