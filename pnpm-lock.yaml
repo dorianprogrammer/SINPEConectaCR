@@ -121,9 +121,15 @@ importers:
 
   apps/crm-service:
     dependencies:
+      dotenv:
+        specifier: ^17.2.3
+        version: 17.2.3
       express:
         specifier: ^4.19.2
         version: 4.22.1
+      pg:
+        specifier: ^8.17.1
+        version: 8.17.2
     devDependencies:
       '@types/express':
         specifier: ^4.17.21
@@ -131,6 +137,9 @@ importers:
       '@types/node':
         specifier: ^20.11.30
         version: 20.19.30
+      '@types/pg':
+        specifier: ^8.16.0
+        version: 8.16.0
       tsx:
         specifier: ^4.19.0
         version: 4.21.0

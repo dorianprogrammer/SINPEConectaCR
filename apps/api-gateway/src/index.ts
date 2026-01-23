@@ -50,7 +50,7 @@ app.use(
 app.use(
   '/crm',
   proxy(targets.crm, {
-    proxyReqPathResolver: (req) => `/crm${req.url}`,
+    proxyReqPathResolver: (req) => req.url,
   }),
 );
 

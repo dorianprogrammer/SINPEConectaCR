@@ -8,7 +8,7 @@ const __dirname = path.dirname(__filename);
 
 const candidates = [
   path.resolve(process.cwd(), '.env'),
-  path.resolve(process.cwd(), 'apps/auth-service/.env'),
+  path.resolve(process.cwd(), 'apps/crm-service/.env'),
   path.resolve(__dirname, '../.env'),
   path.resolve(__dirname, '../../.env'),
 ];
