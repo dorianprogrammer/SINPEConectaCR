@@ -41,8 +41,8 @@ Cada desarrollador trabaja en una rama personalizada derivada de `dev`. Estas ra
 - `nameDev1` hace referencia al desarrollador responsable.
 
 Ejemplo:  
-- `dev-v1.0.7-Pedro`  
-- `dev-v1.0.7-Ana`
+- `dev-v1.0.7-David`  
+- `dev-v1.0.7-Dorian`
 
 **Utilización:**  
 - Espacio aislado para desarrollo por desarrollador o funcionalidad.  
@@ -86,8 +86,8 @@ graph TD
     A[main]
     B[producción]
     C[dev]
-    D1[dev-v1.0.7-Pedro]
-    D2[dev-v1.0.7-Ana]
+    D1[dev-v1.0.7-David]
+    D2[dev-v1.0.7-Dorian]
     E1[reset-dev-v1.0.7]
     E2[bkp-dev-v1.0.6]
 
@@ -104,7 +104,7 @@ graph TD
 ## Ejemplo de Flujo de Trabajo
 
 1. **Flujo de Desarrollador**:  
-   - Trabajan en su rama personalizada (ejemplo: `dev-v1.0.7-Pedro`).  
+   - Trabajan en su rama personalizada (ejemplo: `dev-v1.0.7-David`).  
    - Una vez terminado el desarrollo, se envía un Pull Request hacia `dev`.  
    - Tras pruebas, el código se integra a `dev`.
 
