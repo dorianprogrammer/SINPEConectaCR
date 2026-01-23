@@ -42,17 +42,6 @@ SINPEConectaCR es una plataforma inteligente para PYMES en Costa Rica que conect
 
 </div>
 
----
-
-### 📋 **RESPONSABILIDADES POR ROL**
-
-| Rol | Responsabilidades Clave | Tecnologías Principales |
-|-----|------------------------|-------------------------|
-| **👑 Autor Principal**<br>Dorian Rodríguez Ruiz | - Arquitectura general del sistema<br>- Integración de IA/ML<br>- WhatsApp Business API<br>- Liderazgo técnico y visión del producto | `Python` `FastAPI` `OpenAI` `Docker` `AWS` |
-| **💻 Coautor**<br>David Artavia Arias | - **Diseño y arquitectura de Base de Datos**<br>- **Desarrollo de microservicios Backend**<br>- **Implementación Frontend**<br>- **Integración de sistemas** | `PostgreSQL` `Node.js` `React` `Express` `Redis` |
-
----
-
 <div align="center">
 
 ✨ **Un proyecto construido con pasión desde Costa Rica** 🇨🇷 ✨
