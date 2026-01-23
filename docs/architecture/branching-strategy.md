@@ -29,23 +29,23 @@ Cada versión importante tiene una rama de desarrollo específica (`development-
 
 **Utilización:**  
 - Al incrementar una versión, se crea una nueva rama `development-vx.x.x` como el punto principal de interacción.  
-- Las ramas personalizadas de colaboradores derivan de esta rama.
+- Las ramas personalizadas de los desarrolladores derivan de esta rama.
 
 **Nota:**  
-La nueva rama creada (`development-vx.x.x`) debe configurarse como la rama por defecto del repositorio.
+La nueva rama creada (`development-vx.x.x`) se configura como la nueva rama por defecto del repositorio.
 
 ---
 
 ### Ramas de Colaboradores
-Cada desarrollador trabaja en su rama personalizada derivada de `development-vx.x.x`. El formato del nombre sigue `dev-vx.x.x-NombreColaborador`.
+Cada desarrollador trabaja en una rama personalizada derivada de `development-vx.x.x`. El formato del nombre sigue el estándar `dev-vx.x.x-NombreColaborador`.
 
 Ejemplo:  
 - `dev-v1.0.7-David`  
-- `dev-v1.0.7-Dorian`
+- `dev-v1.0.7-Drian`
 
 **Utilización:**  
 - Espacio aislado para desarrollar nuevas funcionalidades.  
-- Los cambios se envían a la rama `development-vx.x.x` mediante Pull Requests (PRs).
+- Los cambios se envían a la rama de desarrollo actual (`development-vx.x.x`) mediante Pull Requests (PRs).
 
 ---
 
@@ -70,7 +70,7 @@ graph TD
     B[producción]
     C[development-v1.0.7]
     D1[dev-v1.0.7-David]
-    D2[dev-v1.0.7-Dorian]
+    D2[dev-v1.0.7-Drian]
     E1[reset-development-v1.0.7]
     E2[bkp-development-v1.0.6]
 
@@ -84,18 +84,20 @@ graph TD
 
 ---
 
-## Representación en Diagrama de Manejo de Versiones
+## Representación en Diagrama: Cambio de Versión
 
-El siguiente diagrama muestra el proceso de incrementación de una versión y cómo se adaptan las ramas:
+El siguiente diagrama explica el proceso de transición al trabajar con una nueva versión en el repositorio. Cada nuevo incremento de versión requiere crear ramas específicas para el desarrollo y los colaboradores.
 
 ```mermaid
 graph TD
     A[development-v1.0.6]
     B[dev-v1.0.6-David]
-    C[dev-v1.0.6-Dorian]
+    C[dev-v1.0.6-Drian]
     D[producción]
     E[main]
     F[development-v1.0.7]
+    G[dev-v1.0.7-David]
+    H[dev-v1.0.7-Drian]
 
     A --> B
     A --> C
@@ -103,29 +105,45 @@ graph TD
     C --> A
     A --> D
     D --> E
-    B -.nuevo PR desde rama dev.-> F
-    C -.nuevo PR desde rama dev.-> F
+    A -.copia exacta de producción.-> F
     F -.configuración como nueva rama por defecto.-> D
-    F -.actualización de colaboradores.-> B
+    F -.nuevas ramas de colaboradores basadas en desarrollo.-> G
+    F -.nuevas ramas de colaboradores basadas en desarrollo.-> H
+    B -.nuevo PR hacia desarrollo actual.-> F
+    C -.nuevo PR hacia desarrollo actual.-> F
+    G -.nuevo PR hacia desarrollo actual.-> F
+    H -.nuevo PR hacia desarrollo actual.-> F
 ```
 
 ---
 
-## Ejemplo de Flujo de Trabajo
+## Explicación del Proceso
 
-### Creación de una Nueva Versión:
+### 1. Creación de Nueva Rama de Desarrollo (Versión Actual)
+Cuando se incrementa la versión del proyecto, se crea una nueva rama llamada `development-vx.x.x` (por ejemplo, `development-v1.0.7`):
+- Esta nueva rama es una copia exacta del contenido actual que se encuentra en `producción`.
+- La rama `development-v1.0.7` será configurada como la nueva rama por defecto del repositorio.
 
-1. Cuando se requiere una nueva versión (por ejemplo, de `v1.0.6` a `v1.0.7`), se realiza lo siguiente:
-   - Crear una nueva rama `development-v1.0.7`.
-   - Configurar esta nueva rama como la rama por defecto del repositorio.
+### 2. Creación de Nuevas Ramas de Colaboradores
+Para cada desarrollador en el equipo, se crean nuevas ramas derivadas de `development-vx.x.x`:
+- Ejemplo: `dev-v1.0.7-David`, `dev-v1.0.7-Drian`.
+- Cada colaborador trabajará en su propia rama, asegurando un espacio aislado para el desarrollo de nuevas funcionalidades o corrección de defectos.
 
-2. Actualización de los colaboradores:
-   - Todas las ramas individuales (`dev-vx.x.x-NombreColaborador`) deben derivarse de la nueva rama `development-vx.x.x` y vincularse al trabajo de la versión actual.
+### 3. Flujo de Trabajo de Ramas
+- Las ramas de los colaboradores (`dev-vx.x.x-Nombre`) deben enviar una Pull Request (PR) hacia la rama de desarrollo actual (`development-v1.0.7`).
+- Una vez integrados y aprobados, los cambios serán evaluados en `producción`.
+
+### 4. Configuración de la Nueva Rama por Defecto
+Después de crear la nueva rama de desarrollo (`development-v1.0.7`), esta se configura como la nueva rama por defecto del repositorio:
+- Esto garantiza que los nuevos desarrollos se centralicen y trabajen en la versión vigente.
+
+### 5. Flujo hacia Producción y Main
+Las actualizaciones aprobadas en `development-v1.0.7` se integran posteriormente en la rama `producción`. Una vez validadas en preproducción, los cambios serán fusionados en `main` para el despliegue definitivo.
 
 ---
 
-## Justificación de la Estrategia
+## Beneficios de Esta Estrategia
 
-- **Organización:** La separación de ramas por propósito, versión y colaborador simplifica el trabajo colaborativo.  
-- **Fiabilidad:** Las validaciones jerárquicas minimizan riesgos en producción.  
-- **Escalabilidad:** Este enfoque es adaptable a proyectos pequeños y grandes, manteniendo la calidad del código.
+- **Organización:** La creación de nuevas ramas por versión y por colaborador simplifica el seguimiento de tareas y cambios.
+- **Estabilidad:** Las copias basadas en ramas validadas (como `producción`) garantizan que el desarrollo comience desde un estado funcional.
+- **Control:** El uso de ramas por defecto asegura que los colaboradores trabajen siempre en la versión correspondiente, evitando conflictos o mezclas entre versiones.
