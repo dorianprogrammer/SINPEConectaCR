@@ -1,3 +1,5 @@
+import { UserRole } from '../models/user.model.js';
+
 export type AuthUser = {
   userId: string;
   businessId: string;
@@ -10,4 +12,10 @@ declare global {
       user?: AuthUser;
     }
   }
+}
+
+export interface JwtPayload {
+  sub: string;
+  businessId: string;
+  role: UserRole;
 }

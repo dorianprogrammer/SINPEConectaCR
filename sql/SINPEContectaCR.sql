@@ -1,6 +1,54 @@
 
 
 
+-- CREATE OR REPLACE FUNCTION SP_CRM_CONTACT_DELETE(
+--   P_BUSINESS_ID UUID,
+--   P_ID UUID
+-- )
+-- RETURNS TABLE (
+--   DELETED BOOLEAN
+-- )
+-- LANGUAGE PLPGSQL
+-- AS $$
+-- BEGIN
+--   IF EXISTS (
+--     SELECT 1
+--       FROM ORDERS O
+--      WHERE O.BUSINESS_ID = P_BUSINESS_ID
+--        AND O.CONTACT_ID = P_ID
+--   ) THEN
+--     RAISE EXCEPTION 'CONTACT_HAS_ORDERS';
+--   END IF;
+
+--   DELETE FROM CONTACTS
+--    WHERE BUSINESS_ID = P_BUSINESS_ID
+--      AND ID = P_ID;
+
+--   RETURN QUERY
+--   SELECT FOUND AS DELETED;
+-- END;
+-- $$;
+
+
+-- INSERT INTO CONTACTS (ID, BUSINESS_ID, PHONE, NAME, EMAIL, NOTES)
+-- VALUES
+--   ('11111111-1111-1111-1111-111111111111', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '+50688881111', 'Juan Perez', 'juan@test.com', 'Cliente frecuente'),
+--   ('22222222-2222-2222-2222-222222222222', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '+50688882222', 'Maria Lopez', 'maria@test.com', NULL),
+--   ('33333333-3333-3333-3333-333333333333', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa', '+50688883333', 'Carlos Mora', NULL, 'Compra grande');
+
+-- INSERT INTO ORDERS (ID, BUSINESS_ID, CONTACT_ID, ORDER_CODE, TOTAL_CRC, STATUS, DUE_DATE, NOTE)
+-- VALUES
+--   ('aaaa1111-0000-0000-0000-000000000001', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+--    '11111111-1111-1111-1111-111111111111', 'ORD-20260122-0001', 12500, 'PENDING', '2026-01-25', 'Pendiente de pago'),
+
+--   ('aaaa1111-0000-0000-0000-000000000002', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+--    '22222222-2222-2222-2222-222222222222', 'ORD-20260122-0002', 22000, 'PAID', NULL, 'Pagado por SINPE'),
+
+--   ('aaaa1111-0000-0000-0000-000000000003', 'aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa',
+--    '33333333-3333-3333-3333-333333333333', 'ORD-20260122-0003', 18000, 'IN_REVIEW', NULL, 'Referencia dudosa');
+
+
+
 
 -- CREATE OR REPLACE FUNCTION SP_CRM_DASHBOARD_SUMMARY(
 --   P_BUSINESS_ID UUID

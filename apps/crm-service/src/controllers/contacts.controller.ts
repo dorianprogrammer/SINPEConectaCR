@@ -39,7 +39,14 @@ export async function remove(req: Request, res: Response) {
   const businessId = req.user!.businessId;
   const id = req.params.id;
 
-  const ok = await svc.deleteContact({ businessId, id });
-  if (!ok) return res.status(404).json({ message: 'NOT_FOUND' });
-  return res.status(204).send();
+  try {
+    const ok = await svc.deleteContact({ businessId, id });
+    if (!ok) return res.status(404).json({ message: 'NOT_FOUND' });
+    return res.status(204).send();
+  } catch (e: any) {
+    if (e?.message?.includes('CONTACT_HAS_ORDERS')) {
+      return res.status(409).json({ message: 'CONTACT_HAS_ORDERS' });
+    }
+    throw e;
+  }
 }
