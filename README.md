@@ -4,8 +4,13 @@ SINPEConectaCR es una plataforma inteligente para PYMES en Costa Rica que conect
 
 
 **Autor:** Dorian Rodríguez Ruiz  
-**Rol:** Software Developer | IA aplicada a PYMES  
+**Rol:** Software Developer | IA aplicada a PYMES   
 **País:** Costa Rica 🇨🇷  
+**-----------------------**
+**Coautor:** David Artavia Arias
+**Rol:** Full Stack Developer | Arquitectura de Datos & Sistemas   
+**País:** Costa Rica 🇨🇷  
+
 
 > ⚠️ **Proyecto de personal branding y Open Source.**  
 > Diseñado para demostrar arquitectura moderna, integración con WhatsApp, automatización de pagos SINPE y uso práctico de IA en contextos reales de PYMES.
