@@ -16,49 +16,46 @@ La rama `main` contiene código estable y listo para producción. Solo recibe ac
 ---
 
 ### Rama Producción (`producción`)
-La rama `producción` sirve de puente entre `main` y `development-vx.x.x`. Recibe código desde `development-vx.x.x` aprobado mediante pruebas de integración. Prepara el código para despliegues definitivos.
+La rama `producción` sirve como la puerta final antes de integrar el código en `main`. Todas las versiones aprobadas y probadas en QA se promueven desde `development-vx.x.x` hacia `producción`.
 
 **Utilización:**  
-- Para pruebas finales en un entorno de pre-producción.  
-- Plataforma para validación antes de fusionarse con `main`.
+- Para pruebas finales en entornos de preproducción.  
+- Solo se fusiona después de recibir un PR desde `development-vx.x.x`.
 
 ---
 
 ### Rama de Desarrollo por Versión (`development-vx.x.x`)
-Cada versión importante tiene una rama de desarrollo específica (`development-vx.x.x`). Servirá como la base para todos los trabajos relacionados con esa versión.
-
-**Utilización:**  
-- Al incrementar una versión, se crea una nueva rama `development-vx.x.x` como el punto principal de interacción.  
-- Las ramas personalizadas de los desarrolladores derivan de esta rama.
+Cada versión tiene su propia rama específica de desarrollo (`development-vx.x.x`). Esta rama:
+- Actúa como punto central de integración para todo el código relacionado con una versión específica.
+- Se crea como una **copia exacta** de `producción` cuando se inicia el trabajo en una nueva versión.
 
 **Nota:**  
-La nueva rama creada (`development-vx.x.x`) se configura como la nueva rama por defecto del repositorio.
+Cuando se incrementa la versión (por ejemplo, de `v1.0.6` a `v1.0.7`), se crea la nueva rama `development-v1.0.7` como una copia de `producción`.
 
 ---
 
 ### Ramas de Colaboradores
-Cada desarrollador trabaja en una rama personalizada derivada de `development-vx.x.x`. El formato del nombre sigue el estándar `dev-vx.x.x-NombreColaborador`.
+Cada desarrollador trabaja en una rama personalizada derivada de `development-vx.x.x`. Las ramas de colaboradores para una nueva versión (`dev-vx.x.x-Nombre`) se regeneran con cada incremento de versión.
 
 Ejemplo:  
-- `dev-v1.0.7-David`  
-- `dev-v1.0.7-Dorian`
+- `dev-v1.0.6-David` → Aporta cambios a `development-v1.0.6`.  
+- `dev-v1.0.7-David` → Aporta cambios a `development-v1.0.7` en la nueva versión.
 
 **Utilización:**  
-- Espacio aislado para desarrollar nuevas funcionalidades.  
-- Los cambios se envían a la rama de desarrollo actual (`development-vx.x.x`) mediante Pull Requests (PRs).
+- Espacio aislado para el desarrollo individual con menor riesgo de conflictos.  
+- Los cambios se validan mediante PR hacia la rama de desarrollo correspondiente (`development-vx.x.x`).
 
 ---
 
 ### Ramas de Respaldo y Restauración
-Ramas de respaldo (`bkp-*`) y restauración (`reset-*`) aseguran la integridad y disponibilidad de versiones adicionales.
+Las ramas de respaldo (`bkp-*`) y restauración (`reset-*`) garantizan que las versiones anteriores permanezcan accesibles para referencia o recuperación.
 
 Ejemplo:  
-- `bkp-development-v1.0.7`  
+- `bkp-development-v1.0.6`  
 - `reset-development-v1.0.6`
 
 **Utilización:**  
-- Para restaurar estados previos o proteger entregas importantes.  
-- Ante problemas mayores, sirven para volver a puntos funcionales.
+- Para archivado o recuperación de versiones anteriores.  
 
 ---
 
@@ -68,10 +65,10 @@ Ejemplo:
 graph TD
     A[main]
     B[producción]
-    C[development-v1.0.7]
-    D1[dev-v1.0.7-David]
-    D2[dev-v1.0.7-Dorian]
-    E1[reset-development-v1.0.7]
+    C[development-v1.0.6]
+    D1[dev-v1.0.6-David]
+    D2[dev-v1.0.6-Dorian]
+    E1[reset-development-v1.0.6]
     E2[bkp-development-v1.0.6]
 
     A <-- B
@@ -85,8 +82,6 @@ graph TD
 ---
 
 ## Representación en Diagrama: Cambio de Versión
-
-El siguiente diagrama explica el proceso de transición al trabajar con una nueva versión en el repositorio. Cada nuevo incremento de versión requiere crear ramas específicas para el desarrollo y los colaboradores.
 
 ```mermaid
 graph TD
@@ -105,45 +100,38 @@ graph TD
     C --> A
     A --> D
     D --> E
-    A -.copia exacta de producción.-> F
-    F -.configuración como nueva rama por defecto.-> D
-    F -.nuevas ramas de colaboradores basadas en desarrollo.-> G
-    F -.nuevas ramas de colaboradores basadas en desarrollo.-> H
-    B -.nuevo PR hacia desarrollo actual.-> F
-    C -.nuevo PR hacia desarrollo actual.-> F
-    G -.nuevo PR hacia desarrollo actual.-> F
-    H -.nuevo PR hacia desarrollo actual.-> F
+    D -.copia para nueva versión.-> F
+    F -.nuevas ramas recreadas desde desarrollo.-> G
+    F -.nuevas ramas recreadas desde desarrollo.-> H
+    B -.PR solo a development-v1.0.6.-> A
+    C -.PR solo a development-v1.0.6.-> A
+    G -.PR hacia nueva rama de desarrollo.-> F
+    H -.PR hacia nueva rama de desarrollo.-> F
 ```
 
 ---
 
 ## Explicación del Proceso
 
-### 1. Creación de Nueva Rama de Desarrollo (Versión Actual)
-Cuando se incrementa la versión del proyecto, se crea una nueva rama llamada `development-vx.x.x` (por ejemplo, `development-v1.0.7`):
-- Esta nueva rama es una copia exacta del contenido actual que se encuentra en `producción`.
-- La rama `development-v1.0.7` será configurada como la nueva rama por defecto del repositorio.
+### 1. Finalización de la Versión Actual (`v1.0.6`)
+- Los desarrolladores (`dev-v1.0.6-David`, `dev-v1.0.6-Dorian`) trabajan en sus respectivas ramas.
+- Las contribuciones de código se envían mediante Pull Requests (PRs) hacia `development-v1.0.6`.
+- Una vez QA aprueba la versión, se realiza un PR desde `development-v1.0.6` hacia `producción`. Esto marca el final de la versión.
 
-### 2. Creación de Nuevas Ramas de Colaboradores
-Para cada desarrollador en el equipo, se crean nuevas ramas derivadas de `development-vx.x.x`:
-- Ejemplo: `dev-v1.0.7-David`, `dev-v1.0.7-Drian`.
-- Cada colaborador trabajará en su propia rama, asegurando un espacio aislado para el desarrollo de nuevas funcionalidades o corrección de defectos.
+### 2. Creación de la Nueva Versión (`v1.0.7`)
+- Se crea una nueva rama `development-v1.0.7` como **una copia exacta** de `producción`. Esto asegura que el trabajo en la nueva versión comience desde una base funcional y estable.
+- Las ramas individuales de los desarrolladores (`dev-v1.0.7-David`, `dev-v1.0.7-Dorian`) se recrean, derivando de la nueva rama de desarrollo (`development-v1.0.7`).
 
-### 3. Flujo de Trabajo de Ramas
-- Las ramas de los colaboradores (`dev-vx.x.x-Nombre`) deben enviar una Pull Request (PR) hacia la rama de desarrollo actual (`development-v1.0.7`).
-- Una vez integrados y aprobados, los cambios serán evaluados en `producción`.
-
-### 4. Configuración de la Nueva Rama por Defecto
-Después de crear la nueva rama de desarrollo (`development-v1.0.7`), esta se configura como la nueva rama por defecto del repositorio:
-- Esto garantiza que los nuevos desarrollos se centralicen y trabajen en la versión vigente.
-
-### 5. Flujo hacia Producción y Main
-Las actualizaciones aprobadas en `development-v1.0.7` se integran posteriormente en la rama `producción`. Una vez validadas en preproducción, los cambios serán fusionados en `main` para el despliegue definitivo.
+### 3. Flujo de Trabajo en la Nueva Versión
+- Los desarrolladores trabajan en sus respectivas ramas (`dev-v1.0.7-David`, `dev-v1.0.7-Dorian`) y envían sus contribuciones hacia `development-v1.0.7`.
+- Una vez completada y aprobada la nueva versión, el ciclo se repite:  
+   - PR de `development-v1.0.7` hacia `producción`.
+   - Creación de la siguiente versión (`v1.0.8`).
 
 ---
 
 ## Beneficios de Esta Estrategia
 
-- **Organización:** La creación de nuevas ramas por versión y por colaborador simplifica el seguimiento de tareas y cambios.
-- **Estabilidad:** Las copias basadas en ramas validadas (como `producción`) garantizan que el desarrollo comience desde un estado funcional.
-- **Control:** El uso de ramas por defecto asegura que los colaboradores trabajen siempre en la versión correspondiente, evitando conflictos o mezclas entre versiones.
+- **Organización:** Se realizan transiciones claras entre versiones, recreándose ramas individuales y de desarrollo con cada incremento.
+- **Estabilidad:** Las bases de nuevas versiones se toman de ramas probadas en producción, proporcionando un punto de partida confiable.
+- **Control:** Las ramas individuales garantizan que cada colaborador tenga un espacio dedicado para trabajar, reduciendo conflictos mientras se controlan los PRs hacia ramas de versión.
