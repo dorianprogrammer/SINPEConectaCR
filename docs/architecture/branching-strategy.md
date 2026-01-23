@@ -96,17 +96,15 @@ graph TD
 
     A --> B
     A --> C
-    B --> A
-    C --> A
-    A --> D
-    D --> E
-    D -.copia para nueva versión.-> F
-    F -.nuevas ramas recreadas desde desarrollo.-> G
-    F -.nuevas ramas recreadas desde desarrollo.-> H
-    B -.PR solo a development-v1.0.6.-> A
-    C -.PR solo a development-v1.0.6.-> A
-    G -.PR hacia nueva rama de desarrollo.-> F
-    H -.PR hacia nueva rama de desarrollo.-> F
+    B --> A %% PR solo hacia development-v1.0.6
+    C --> A %% PR solo hacia development-v1.0.6
+    A --> D %% Versión aprobada en QA pasa a producción
+    D --> E %% Se fusiona producción con main
+    D --> F %% Nueva rama creada como copia exacta de producción
+    F --> G %% Desarrollo para nueva versión: David
+    F --> H %% Desarrollo para nueva versión: Dorian
+    G --> F %% PR hacia nueva rama de desarrollo
+    H --> F %% PR hacia nueva rama de desarrollo
 ```
 
 ---
