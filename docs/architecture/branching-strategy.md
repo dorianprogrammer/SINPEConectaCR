@@ -41,7 +41,7 @@ Cada desarrollador trabaja en una rama personalizada derivada de `development-vx
 
 Ejemplo:  
 - `dev-v1.0.7-David`  
-- `dev-v1.0.7-Drian`
+- `dev-v1.0.7-Dorian`
 
 **Utilización:**  
 - Espacio aislado para desarrollar nuevas funcionalidades.  
@@ -70,7 +70,7 @@ graph TD
     B[producción]
     C[development-v1.0.7]
     D1[dev-v1.0.7-David]
-    D2[dev-v1.0.7-Drian]
+    D2[dev-v1.0.7-Dorian]
     E1[reset-development-v1.0.7]
     E2[bkp-development-v1.0.6]
 
@@ -92,12 +92,12 @@ El siguiente diagrama explica el proceso de transición al trabajar con una nuev
 graph TD
     A[development-v1.0.6]
     B[dev-v1.0.6-David]
-    C[dev-v1.0.6-Drian]
+    C[dev-v1.0.6-Dorian]
     D[producción]
     E[main]
     F[development-v1.0.7]
     G[dev-v1.0.7-David]
-    H[dev-v1.0.7-Drian]
+    H[dev-v1.0.7-Dorian]
 
     A --> B
     A --> C
