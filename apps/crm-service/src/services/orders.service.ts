@@ -35,7 +35,7 @@ export async function listOrders(params: {
   limit: number;
   offset: number;
 }) {
-  const q = `SELECT * FROM SP_CRM_ORDER_LIST($1, $2, $3, $4, $5)`;
+  const q = `SELECT * FROM crm_proc.SP_CRM_ORDER_LIST($1, $2, $3, $4, $5)`;
   const resp = await pool.query(q, [
     params.businessId,
     params.status ?? null,
@@ -55,7 +55,7 @@ export async function createOrder(input: {
   dueDate?: string;
   note?: string;
 }) {
-  const q = `SELECT * FROM SP_CRM_ORDER_CREATE($1, $2, $3, $4, $5, $6, $7)`;
+  const q = `SELECT * FROM crm_proc.SP_CRM_ORDER_CREATE($1, $2, $3, $4, $5, $6, $7)`;
   const resp = await pool.query(q, [
     input.businessId,
     input.contactId,
@@ -75,7 +75,7 @@ export async function updateOrder(params: {
   dueDate?: string | null;
   note?: string | null;
 }) {
-  const q = `SELECT * FROM SP_CRM_ORDER_UPDATE($1, $2, $3, $4, $5)`;
+  const q = `SELECT * FROM crm_proc.SP_CRM_ORDER_UPDATE($1, $2, $3, $4, $5)`;
   const resp = await pool.query(q, [
     params.businessId,
     params.id,
@@ -92,14 +92,14 @@ export async function updateOrderStatus(params: {
   id: string;
   status: OrderStatus;
 }) {
-  const q = `SELECT * FROM SP_CRM_ORDER_UPDATE_STATUS($1, $2, $3)`;
+  const q = `SELECT * FROM crm_proc.SP_CRM_ORDER_UPDATE_STATUS($1, $2, $3)`;
   const resp = await pool.query(q, [params.businessId, params.id, params.status]);
   if (!resp.rows.length) return null;
   return mapRow(resp.rows[0]);
 }
 
 export async function deleteOrder(params: { businessId: string; id: string }) {
-  const q = `SELECT * FROM SP_CRM_ORDER_DELETE($1, $2)`;
+  const q = `SELECT * FROM crm_proc.SP_CRM_ORDER_DELETE($1, $2)`;
   const resp = await pool.query(q, [params.businessId, params.id]);
   return Boolean(resp.rows[0]?.deleted);
 }

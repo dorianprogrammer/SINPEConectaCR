@@ -13,7 +13,7 @@ export type DashboardSummary = {
 export async function getDashboardSummary(params: {
   businessId: string;
 }): Promise<DashboardSummary> {
-  const q = `SELECT * FROM SP_CRM_DASHBOARD_SUMMARY($1)`;
+  const q = `SELECT * FROM crm_proc.SP_CRM_DASHBOARD_SUMMARY($1)`;
   const resp = await pool.query(q, [params.businessId]);
 
   const r = resp.rows[0] ?? {
