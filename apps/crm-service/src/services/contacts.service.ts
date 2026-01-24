@@ -32,7 +32,7 @@ export async function listContacts(params: {
 }) {
   const { businessId, search, limit, offset } = params;
 
-  const q = `SELECT * FROM SP_CRM_CONTACT_LIST($1, $2, $3, $4)`;
+  const q = `SELECT * FROM crm_proc.SP_CRM_CONTACT_LIST($1, $2, $3, $4)`;
   const resp = await pool.query(q, [businessId, search ?? null, limit, offset]);
 
   return resp.rows.map(mapRow);
@@ -47,7 +47,7 @@ export async function createContact(input: {
 }) {
   const phone = normalizePhone(input.phone);
 
-  const q = `SELECT * FROM SP_CRM_CONTACT_CREATE($1, $2, $3, $4, $5)`;
+  const q = `SELECT * FROM crm_proc.SP_CRM_CONTACT_CREATE($1, $2, $3, $4, $5)`;
   const resp = await pool.query(q, [
     input.businessId,
     phone,
@@ -67,7 +67,7 @@ export async function updateContact(params: {
   email?: string | null;
   notes?: string | null;
 }) {
-  const q = `SELECT * FROM SP_CRM_CONTACT_UPDATE($1, $2, $3, $4, $5, $6)`;
+  const q = `SELECT * FROM crm_proc.SP_CRM_CONTACT_UPDATE($1, $2, $3, $4, $5, $6)`;
   const resp = await pool.query(q, [
     params.businessId,
     params.id,
@@ -82,7 +82,7 @@ export async function updateContact(params: {
 }
 
 export async function deleteContact(params: { businessId: string; id: string }) {
-  const q = `SELECT * FROM SP_CRM_CONTACT_DELETE($1, $2)`;
+  const q = `SELECT * FROM crm_proc.SP_CRM_CONTACT_DELETE($1, $2)`;
   const resp = await pool.query(q, [params.businessId, params.id]);
   return Boolean(resp.rows[0]?.deleted);
 }

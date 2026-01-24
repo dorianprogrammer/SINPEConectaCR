@@ -6,7 +6,7 @@ export const register = async (
   data: RegisterDTO,
   context?: { ip?: string; userAgent?: string },
 ) => {
-  const result = await executeSP('SP_AUTH_REGISTER', [
+  const result = await executeSP('auth_proc.SP_AUTH_REGISTER', [
     data.businessName,
     data.businessPhone,
     data.email,
@@ -37,7 +37,7 @@ export const register = async (
 };
 
 export const login = async (data: LoginDTO, context?: { ip?: string; userAgent?: string }) => {
-  const result = await executeSP('SP_AUTH_LOGIN', [
+  const result = await executeSP('auth_proc.SP_AUTH_LOGIN', [
     data.email,
     data.password,
     context?.ip,
