@@ -1,54 +1,331 @@
-# Estructura de la Base de Datos
+<!--
+  Database Structure (DBS) — SINPEConectaCR
+  Styled with inline HTML + CSS for a clean, readable doc.
+-->
 
-## Introducción
+<style>
+  :root {
+    --bg: #0b0f1a;
+    --panel: #111827;
+    --text: #e5e7eb;
+    --muted: #94a3b8;
+    --primary: #22d3ee;
+    --accent: #a78bfa;
+    --green: #34d399;
+    --red: #f87171;
+    --border: #1f2937;
+  }
+  .page {
+    background: var(--bg);
+    color: var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+    padding: 24px;
+    line-height: 1.6;
+  }
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+  .hero {
+    background: radial-gradient(1000px 400px at 10% 0%, rgba(167,139,250,0.20), transparent 60%),
+                radial-gradient(1000px 400px at 90% 0%, rgba(34,211,238,0.20), transparent 60%),
+                linear-gradient(180deg, rgba(17,24,39,0.80), rgba(17,24,39,0.60));
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 28px;
+    box-shadow: 0 0 30px rgba(167,139,250,0.08);
+    margin-bottom: 20px;
+  }
+  .title {
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: 0.2px;
+  }
+  .subtitle {
+    font-size: 14px;
+    color: var(--muted);
+    margin-top: 4px;
+  }
+  .grid {
+    display: grid;
+    gap: 16px;
+  }
+  .two-cols {
+    grid-template-columns: 1fr 1fr;
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 18px;
+  }
+  .panel h2 {
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 10px 0;
+  }
+  .panel h3 {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 18px 0 6px 0;
+  }
+  .panel p, .panel li, .panel code, .panel pre {
+    font-size: 14px;
+  }
+  .muted {
+    color: var(--muted);
+  }
+  .badge {
+    display: inline-block;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: linear-gradient(180deg, rgba(31,41,55,0.8), rgba(17,24,39,0.8));
+    color: var(--text);
+    margin-right: 6px;
+  }
+  .authors {
+    display: grid;
+    gap: 14px;
+  }
+  .author-card {
+    display: grid;
+    grid-template-columns: 80px 1fr;
+    gap: 14px;
+    align-items: center;
+    background: linear-gradient(180deg, rgba(31,41,55,0.6), rgba(17,24,39,0.6));
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px;
+  }
+  .avatar {
+    width: 72px;
+    height: 72px;
+    border-radius: 14px;
+    background: radial-gradient(100px 80px at 50% 50%, rgba(34,211,238,0.25), rgba(167,139,250,0.15));
+    border: 1px solid var(--border);
+  }
+  .author-name {
+    font-weight: 700;
+    font-size: 16px;
+  }
+  .author-role {
+    font-size: 12px;
+    color: var(--muted);
+  }
+  .codeblock {
+    background: #0b1220;
+    border: 1px solid #162034;
+    border-radius: 12px;
+    padding: 12px;
+    overflow: auto;
+  }
+  .kbd {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    font-size: 12px;
+  }
+  .list-dot li::marker { color: var(--accent); }
+  @media (max-width: 820px) {
+    .two-cols { grid-template-columns: 1fr; }
+    .author-card { grid-template-columns: 64px 1fr; }
+    .avatar { width: 64px; height: 64px; }
+  }
+</style>
 
-La estructura de la base de datos está diseñada con el propósito de maximizar la separación lógica de componentes y promover la modularidad. Esto se logra utilizando esquemas (`schemas`) y acomodando las diversas entidades y procesos en ubicaciones específicas según su funcionalidad. La separación descrita no solo facilita la mantenibilidad y escalabilidad del sistema, sino que también asegura una buena organización general.
+<div class="page">
+  <div class="container">
+    <section class="hero">
+      <div class="title">Database Structure (DBS) · SINPEConectaCR</div>
+      <div class="subtitle">Arquitectura con separación por dominios y procedimientos, llamadas calificadas por schema</div>
+      <div style="margin-top:10px">
+        <span class="badge">PostgreSQL</span>
+        <span class="badge">Schemas</span>
+        <span class="badge">Stored Procedures</span>
+        <span class="badge">Multi-tenant</span>
+        <span class="badge">DBS</span>
+      </div>
+    </section>
 
-## Características Clave
+    <section class="panel">
+      <h2>Authors</h2>
+      <div class="authors">
+        <div class="author-card">
+          <div class="avatar" aria-hidden="true"></div>
+          <div>
+            <div class="author-name">👑 Dorian Rodríguez Ruiz</div>
+            <div class="author-role">Autor principal · Software Developer · IA aplicada a PYMES (Costa Rica)</div>
+            <div class="muted" style="margin-top:6px">
+              <span class="badge">IA & Arquitectura</span>
+              <span class="badge">Project Lead</span>
+              <span class="badge">WhatsApp API</span>
+            </div>
+          </div>
+        </div>
 
-1. **Separación por Esquemas**: 
-   - Los esquemas (`schemas`) son fundamentales para organizar las tablas, procedimientos almacenados (SP), funciones (`functions`) y otros objetos de la base de datos según su propósito funcional. Por ejemplo:
-     - Las **tablas** relacionadas con usuarios y negocios están en un esquema `public` o `core`.
-     - Los **procedimientos almacenados (SP)** para procesos de autenticación se encuentran en un esquema `auth_proc`.
-     - Otros componentes específicos (como auditorías) son asignados a sus propios esquemas.
+        <div class="author-card">
+          <div class="avatar" aria-hidden="true"></div>
+          <div>
+            <div class="author-name">💻 David Artavia Arias</div>
+            <div class="author-role">Coautor · Full Stack Developer · Arquitectura de Datos & Sistemas (Costa Rica)</div>
+            <div class="muted" style="margin-top:6px">
+              <span class="badge">DB Architecture</span>
+              <span class="badge">Backend Services</span>
+              <span class="badge">Frontend Dev</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="muted" style="margin-top:10px">Fecha: 2026-01-24</div>
+    </section>
 
-2. **Aislamiento de Objetos**: 
-   - Cada componente de la base de datos (tablas, SP, índices, logs) se encapsula en su propio esquema según su funcionalidad. Esto:
-     - Previene conflictos de nombres.
-     - Aumenta la claridad y facilidad del mantenimiento.
+    <section class="grid two-cols">
+      <div class="panel">
+        <h2>Principios de Arquitectura</h2>
+        <ul class="list-dot">
+          <li>Separación por dominios con <span class="kbd">schemas</span> dedicados.</li>
+          <li>Procedimientos almacenados organizados por esquema de lógica (<span class="kbd">auth_proc</span>, <span class="kbd">crm_proc</span>).</li>
+          <li>Llamadas desde la app usando nombres con <em>schema calificado</em> (sin <span class="kbd">search_path</span>, sin wrappers en <span class="kbd">public</span>).</li>
+          <li>Archivos SQL pequeños por responsabilidad: tablas, SPs, índices, datos iniciales.</li>
+        </ul>
+      </div>
 
-3. **Buenas Prácticas**: 
-   - El uso de convenciones de nombres claras asegura que cualquier desarrollador pueda interpretar fácilmente la responsabilidad de un objeto.
-   - Los índices son creados cuidadosamente para mejorar la performance en búsquedas frecuentes.
+      <div class="panel">
+        <h2>Orden de Provisionamiento</h2>
+        <ol>
+          <li>02-Schemas.sql</li>
+          <li>03-Tables/*</li>
+          <li>04-Procedures/*</li>
+          <li>07-Indexes/*</li>
+          <li>08-Initial_Loads.sql</li>
+        </ol>
+        <p class="muted">Nota: 01-Create_DB.sql es informativo; la creación de la base suele ejecutarse fuera de migraciones.</p>
+      </div>
+    </section>
 
-4. **Ejemplo de Usos de Schemas**: 
-   - Ejemplo del esquema `auth_proc`:
-     ```sql
-     CREATE OR REPLACE FUNCTION auth_proc.SP_AUTH_LOGIN(
-       P_EMAIL       VARCHAR,
-       P_PASSWORD    VARCHAR,
-       P_IP          VARCHAR DEFAULT NULL,
-       P_USER_AGENT  TEXT DEFAULT NULL
-     )
-     RETURNS TABLE (
-       USER_ID UUID,
-       EMAIL VARCHAR,
-       ROLE VARCHAR,
-       BUSINESS_ID UUID
-     )
-     LANGUAGE plpgsql
-     AS $$
-     -- Lógica de autenticación aquí
-     $$;
-     ```
+    <section class="panel">
+      <h2>Schemas</h2>
+      <div class="grid two-cols">
+        <div>
+          <h3>Dominio</h3>
+          <ul class="list-dot">
+            <li><strong>core</strong>: businesses, users</li>
+            <li><strong>crm</strong>: contacts, orders, order_items</li>
+            <li><strong>payments</strong>: ingestión/normalización SINPE (futuro)</li>
+            <li><strong>ia</strong>: OCR/LLM (futuro)</li>
+            <li><strong>audit</strong>: auditoría y logs</li>
+            <li><strong>util</strong>: auxiliares</li>
+            <li><strong>repo</strong>: vistas y reportería</li>
+            <li><strong>secu</strong>: datos sensibles (opcional)</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Procedimientos</h3>
+          <ul class="list-dot">
+            <li><strong>auth_proc</strong>: SPs de autenticación</li>
+            <li><strong>crm_proc</strong>: SPs del CRM</li>
+          </ul>
+        </div>
+      </div>
+      <div class="codeblock">
+        <pre><code>CREATE EXTENSION IF NOT EXISTS pgcrypto;
+CREATE SCHEMA IF NOT EXISTS core;
+CREATE SCHEMA IF NOT EXISTS crm;
+CREATE SCHEMA IF NOT EXISTS payments;
+CREATE SCHEMA IF NOT EXISTS ia;
+CREATE SCHEMA IF NOT EXISTS audit;
+CREATE SCHEMA IF NOT EXISTS util;
+CREATE SCHEMA IF NOT EXISTS repo;
+CREATE SCHEMA IF NOT EXISTS auth_proc;
+CREATE SCHEMA IF NOT EXISTS crm_proc;
+CREATE SCHEMA IF NOT EXISTS secu;</code></pre>
+      </div>
+    </section>
 
-     Nota: Al separar funciones relacionadas con autenticación en el esquema `auth_proc`, aseguramos un punto de acceso centralizado para tareas de autenticación.
+    <section class="panel">
+      <h2>Estructura de Carpetas (DBS)</h2>
+      <div class="codeblock">
+        <pre><code>DBS/
+└── Base Product/
+    ├── 01-Create_DB.sql
+    ├── 02-Schemas.sql
+    ├── 03-Tables/
+    │   ├── CORE_BUSINESSES.sql
+    │   ├── CORE_USERS.sql
+    │   ├── AUDIT_AUTH_AUDIT_LOGS.sql
+    │   ├── CRM_CONTACTS.sql
+    │   ├── CRM_ORDERS.sql
+    │   └── CRM_ORDER_ITEMS.sql
+    ├── 04-Procedures/
+    │   ├── AUTH_SP_AUTH_REGISTER.sql
+    │   ├── AUTH_SP_AUTH_LOGIN.sql
+    │   ├── CRM_SP_CRM_DASHBOARD_SUMMARY.sql
+    │   ├── CRM_SP_CRM_ORDER_LIST.sql
+    │   ├── CRM_SP_CRM_ORDER_CREATE.sql
+    │   ├── CRM_SP_CRM_ORDER_UPDATE.sql
+    │   ├── CRM_SP_CRM_ORDER_UPDATE_STATUS.sql
+    │   ├── CRM_SP_CRM_ORDER_DELETE.sql
+    │   ├── CRM_SP_CRM_CONTACT_LIST.sql
+    │   ├── CRM_SP_CRM_CONTACT_CREATE.sql
+    │   ├── CRM_SP_CRM_CONTACT_UPDATE.sql
+    │   └── CRM_SP_CRM_CONTACT_DELETE.sql
+    ├── 05-Primary_Keys.sql
+    ├── 06-Foreign_Keys.sql
+    ├── 07-Indexes/
+    │   ├── CORE_IDX_USERS_EMAIL.sql
+    │   ├── CORE_IDX_USERS_BUSINESS_ID.sql
+    │   ├── AUDIT_IDX_AUTH_LOGS.sql
+    │   ├── CRM_IDX_CONTACTS.sql
+    │   └── CRM_IDX_ORDERS.sql
+    ├── 08-Initial_Loads.sql</code></pre>
+      </div>
+    </section>
 
-## Ejemplo Práctico de "CREATE FUNCTION"
+    <section class="panel">
+      <h2>Tablas · ejemplos</h2>
+      <h3>core.businesses</h3>
+      <div class="codeblock"><pre><code>CREATE TABLE IF NOT EXISTS core.businesses (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  name VARCHAR(150) NOT NULL,
+  phone VARCHAR(30) NOT NULL,
+  is_active BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);</code></pre></div>
 
-Un ejemplo más detallado de un SP organizando su lógica empresarial en esquemas bien definidos:
+      <h3>core.users</h3>
+      <div class="codeblock"><pre><code>CREATE TABLE IF NOT EXISTS core.users (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  email VARCHAR(150) NOT NULL UNIQUE,
+  password_hash TEXT NOT NULL,
+  role VARCHAR(20) NOT NULL CHECK (role IN ('ADMIN', 'PYME')),
+  business_id UUID NOT NULL,
+  is_active BOOLEAN NOT NULL DEFAULT TRUE,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW(),
+  CONSTRAINT fk_users_business
+    FOREIGN KEY (business_id)
+    REFERENCES core.businesses(id)
+    ON DELETE RESTRICT
+);</code></pre></div>
 
-```sql
+      <h3>audit.auth_audit_logs</h3>
+      <div class="codeblock"><pre><code>CREATE TABLE IF NOT EXISTS audit.auth_audit_logs (
+  id BIGSERIAL PRIMARY KEY,
+  user_id UUID,
+  business_id UUID,
+  action VARCHAR(50) NOT NULL,
+  ip_address VARCHAR(45),
+  user_agent TEXT,
+  created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);</code></pre></div>
+    </section>
+
+    <section class="panel">
+      <h2>Procedimientos · ejemplos</h2>
+      <h3>auth_proc.SP_AUTH_REGISTER</h3>
+      <div class="codeblock"><pre><code>-- =============================================
+-- Autor: Dorian Rodriguez
+-- Fecha: 2026-01-24
+-- Descripción: Registra negocio y usuario, audita y retorna USER_ID, EMAIL, ROLE, BUSINESS_ID
 CREATE OR REPLACE FUNCTION auth_proc.SP_AUTH_REGISTER(
   P_BUSINESS_NAME   VARCHAR,
   P_BUSINESS_PHONE  VARCHAR,
@@ -57,317 +334,59 @@ CREATE OR REPLACE FUNCTION auth_proc.SP_AUTH_REGISTER(
   P_IP              VARCHAR DEFAULT NULL,
   P_USER_AGENT      TEXT DEFAULT NULL
 )
-RETURNS TABLE (
-  USER_ID UUID,
-  EMAIL VARCHAR,
-  ROLE VARCHAR,
-  BUSINESS_ID UUID
-)
+RETURNS TABLE (USER_ID UUID, EMAIL VARCHAR, ROLE VARCHAR, BUSINESS_ID UUID)
 LANGUAGE plpgsql
-AS $$
-DECLARE
-  V_BUSINESS_ID UUID := gen_random_uuid();
-  V_USER_ID UUID := gen_random_uuid();
-  V_PASSWORD_HASH TEXT;
-  V_ROLE VARCHAR := 'PYME';
-BEGIN
-  -- Verifica si ya existe el correo
-  IF EXISTS (SELECT 1 FROM USERS U WHERE U.EMAIL = P_EMAIL) THEN
-    RAISE EXCEPTION 'USER_ALREADY_EXISTS';
-  END IF;
+AS $$ ... $$;</code></pre></div>
 
-  -- Hasea la contraseña
-  V_PASSWORD_HASH := crypt(P_PASSWORD, gen_salt('bf'));
+      <h3>auth_proc.SP_AUTH_LOGIN</h3>
+      <div class="codeblock"><pre><code>-- =============================================
+-- Autor: Dorian Rodriguez
+-- Fecha: 2026-01-24
+-- Descripción: Valida credenciales, audita éxito/fallo y retorna USER_ID, EMAIL, ROLE, BUSINESS_ID
+CREATE OR REPLACE FUNCTION auth_proc.SP_AUTH_LOGIN(
+  P_EMAIL VARCHAR,
+  P_PASSWORD VARCHAR,
+  P_IP VARCHAR DEFAULT NULL,
+  P_USER_AGENT TEXT DEFAULT NULL
+)
+RETURNS TABLE (USER_ID UUID, EMAIL VARCHAR, ROLE VARCHAR, BUSINESS_ID UUID)
+LANGUAGE plpgsql
+AS $$ ... $$;</code></pre></div>
+      <p class="muted">Todos los SPs del CRM siguen el mismo patrón en <span class="kbd">crm_proc</span> con nombres calificados.</p>
+    </section>
 
-  -- Inserta negocio
-  INSERT INTO BUSINESSES (ID, NAME, PHONE)
-  VALUES (V_BUSINESS_ID, P_BUSINESS_NAME, P_BUSINESS_PHONE);
+    <section class="panel">
+      <h2>Índices · ejemplos</h2>
+      <div class="grid two-cols">
+        <div class="codeblock"><pre><code>CREATE INDEX IF NOT EXISTS idx_users_email ON core.users(email);
+CREATE INDEX IF NOT EXISTS idx_users_business_id ON core.users(business_id);</code></pre></div>
+        <div class="codeblock"><pre><code>CREATE INDEX IF NOT EXISTS idx_audit_business_id ON audit.auth_audit_logs(business_id);
+CREATE INDEX IF NOT EXISTS idx_audit_user_id ON audit.auth_audit_logs(user_id);</code></pre></div>
+      </div>
+    </section>
 
-  -- Inserta usuario
-  INSERT INTO USERS (ID, EMAIL, PASSWORD_HASH, ROLE, BUSINESS_ID)
-  VALUES (V_USER_ID, P_EMAIL, V_PASSWORD_HASH, V_ROLE, V_BUSINESS_ID);
+    <section class="panel">
+      <h2>Integración con la Aplicación</h2>
+      <ul class="list-dot">
+        <li>Invocar SPs con nombre calificado por schema (ej. <span class="kbd">auth_proc.SP_AUTH_LOGIN</span>).</li>
+        <li>Evitar <span class="kbd">search_path</span> y wrappers en <span class="kbd">public</span>.</li>
+        <li>Separación por responsabilidad: <span class="kbd">core</span> (entidades), <span class="kbd">crm</span> (dominio CRM), <span class="kbd">audit</span> (trazabilidad), <span class="kbd">auth_proc/crm_proc</span> (procedimientos).</li>
+      </ul>
+    </section>
 
-  -- Audita
-  INSERT INTO AUTH_AUDIT_LOGS (USER_ID, BUSINESS_ID, ACTION, IP_ADDRESS, USER_AGENT)
-  VALUES (V_USER_ID, V_BUSINESS_ID, 'REGISTER_SUCCESS', P_IP, P_USER_AGENT);
+    <section class="panel">
+      <h2>Buenas Prácticas</h2>
+      <ul class="list-dot">
+        <li>Convenciones de nombres claras (English, snake_case para columnas).</li>
+        <li>Constraints cercanos a las definiciones de tablas para legibilidad.</li>
+        <li>Índices explícitos por consultas frecuentes y claves foráneas con intención.</li>
+        <li>Para producción: considerar roles por microservicio (mínimo privilegio).</li>
+      </ul>
+    </section>
 
-  -- Retorna datos alterados
-  RETURN QUERY
-  SELECT
-    V_USER_ID::UUID,
-    P_EMAIL::VARCHAR,
-    V_ROLE::VARCHAR,
-    V_BUSINESS_ID::UUID;
-
-END;
-$$;
-```
-
-## Importancia de los Esquemas
-
-1. **Modularidad**: Permite que múltiples equipos puedan desarrollar objetos de la base de datos sin conflictos, siempre que trabajen en esquemas separados.
-2. **Seguridad**: Mediante la asignación de permisos por esquema, se puede gestionar con mayor granularidad qué usuarios tienen acceso a qué objetos.
-3. **Documentación y Mantenibilidad**: Una estructura más organizada permite documentar y mantener el sistema de manera más eficiente.
-4. **Estandarización**: Fomenta la uniformidad en grandes proyectos.
-
-## Cómo Implementar la Separación en Proyectos Existentes
-
-1. **Crear esquemas**:
-   ```sql
-   CREATE SCHEMA auth_proc;
-   CREATE SCHEMA core;
-   ```
-
-2. **Asignar permisos por esquema**:
-   ```sql
-   GRANT USAGE ON SCHEMA auth_proc TO dev_team;
-   REVOKE USAGE ON SCHEMA core FROM test_team;
-   ```
-
-3. **Migrar objetos existentes**:
-   - Por ejemplo, mover todas las funciones de autenticación al esquema `auth_proc`:
-     ```sql
-     ALTER FUNCTION SP_AUTH_LOGIN SET SCHEMA auth_proc;
-     ALTER FUNCTION SP_AUTH_REGISTER SET SCHEMA auth_proc;
-     ```
-
-4. **Configurar convenciones claras** para equipo de desarrollo:
-   - Tablas principales en `core`.
-   - Lógica de negocio en esquema específico.
-
-## Conclusión
-
-La separación a nivel de estructura de la base de datos, utilizando esquemas, mejora la calidad del desarrollo al ofrecer una clara delineación de responsabilidades y un sistema más seguro, escalable y mantenible.
-
-Con este enfoque, se crea un flujo óptimo que aborda desde la lógica empresarial hasta la implementación técnica efectiva.
-
-# Estructura de la Base de Datos
-
-## Introducción
-
-La base de datos sigue un diseño bien estructurado que prioriza la separación lógica y organizativa mediante el uso de esquemas (`schemas`) y una jerarquía de archivos clara. La estructura propuesta no solo mejora la mantenibilidad y la escalabilidad, sino que también estandariza el desarrollo entre equipos.
-
-A continuación, se detalla la organización de carpetas y la explicación de cada archivo junto con la importancia de los esquemas.
-
----
-
-## Organización de Carpetas y Archivos
-
-La estructura de carpetas sigue un orden lógico para favorecer la mantenibilidad, como se ilustra a continuación:
-
-```
-DTB/
-└── Producto Base/
-    ├── 01-Create_DB.sql
-    ├── 02-Schemas.sql
-    ├── 03-Tables/
-    │   ├── USERS.sql
-    │   ├── BUSINESSES.sql
-    │   └── AUTH_AUDIT_LOGS.sql
-    ├── 04-Procedures/
-    │   ├── SP_AUTH_LOGIN.sql
-    │   └── SP_AUTH_REGISTER.sql
-    ├── 05-Primary Keys.sql
-    ├── 06-Foreign Keys.sql
-    ├── 07-Indexes/
-    │   ├── IDX_USERS_EMAIL.sql
-    │   ├── IDX_USERS_BUSINESS_ID.sql
-    │   └── IDX_AUDIT_LOGS.sql
-    ├── 08-CargasIniciales.sql
-```
-
-### Descripción de Archivos
-
-1. **`01-Create_DB.sql`**:
-   - Archivo principal que ejecuta la creación de la base de datos.
-   - Incluye instrucciones como:
-     ```sql
-     CREATE DATABASE NAME_DB;
-     ```
-
-2. **`02-Schemas.sql`**:
-   - Define los esquemas de la base de datos para organizar componentes.
-   - Por ejemplo:
-     ```sql
-     CREATE SCHEMA public;
-     CREATE SCHEMA auth_proc;
-     CREATE SCHEMA audit;
-     ```
-
-3. **`03-Tables/`**:
-   - Carpeta que contiene las definiciones de las tablas principales.
-   - Archivos destacados:
-     - **`USERS.sql`**:
-       ```sql
-       CREATE TABLE USERS (
-         ID UUID PRIMARY KEY,
-         EMAIL VARCHAR(150) NOT NULL UNIQUE,
-         PASSWORD_HASH TEXT NOT NULL,
-         ROLE VARCHAR(20) NOT NULL CHECK (ROLE IN ('ADMIN', 'PYME')),
-         BUSINESS_ID UUID NOT NULL,
-         IS_ACTIVE BOOLEAN NOT NULL DEFAULT TRUE,
-         CREATED_AT TIMESTAMP NOT NULL DEFAULT NOW(),
-         CONSTRAINT fk_users_business FOREIGN KEY (BUSINESS_ID)
-           REFERENCES BUSINESSES(ID)
-           ON DELETE RESTRICT
-       );
-       ```
-     - **`BUSINESSES.sql`**:
-       ```sql
-       CREATE TABLE BUSINESSES (
-         ID UUID PRIMARY KEY,
-         NAME VARCHAR(150) NOT NULL,
-         PHONE VARCHAR(30) NOT NULL,
-         IS_ACTIVE BOOLEAN NOT NULL DEFAULT TRUE,
-         CREATED_AT TIMESTAMP NOT NULL DEFAULT NOW()
-       );
-       ```
-     - **`AUTH_AUDIT_LOGS.sql`**:
-       ```sql
-       CREATE TABLE AUTH_AUDIT_LOGS (
-         ID BIGSERIAL PRIMARY KEY,
-         USER_ID UUID,
-         BUSINESS_ID UUID,
-         ACTION VARCHAR(50) NOT NULL,
-         IP_ADDRESS VARCHAR(45),
-         USER_AGENT TEXT,
-         CREATED_AT TIMESTAMP NOT NULL DEFAULT NOW()
-       );
-       ```
-
-4. **`04-Procedures/`**:
-   - Carpeta que organiza los procedimientos almacenados (SP).
-   - Archivos destacados:
-     - **`SP_AUTH_LOGIN.sql`**:
-       Implementa el proceso de login.
-       ```sql
-       CREATE OR REPLACE FUNCTION auth_proc.SP_AUTH_LOGIN(
-         P_EMAIL       VARCHAR,
-         P_PASSWORD    VARCHAR,
-         P_IP          VARCHAR DEFAULT NULL,
-         P_USER_AGENT  TEXT DEFAULT NULL
-       )
-       RETURNS TABLE (
-         USER_ID UUID,
-         EMAIL VARCHAR,
-         ROLE VARCHAR,
-         BUSINESS_ID UUID
-       )
-       LANGUAGE plpgsql
-       AS $$
-       BEGIN
-         -- Lógica del login
-       END;
-       $$;
-       ```
-     - **`SP_AUTH_REGISTER.sql`**:
-       Implementa el registro de nuevos usuarios y negocios.
-       ```sql
-       CREATE OR REPLACE FUNCTION auth_proc.SP_AUTH_REGISTER(
-         P_BUSINESS_NAME   VARCHAR,
-         P_BUSINESS_PHONE  VARCHAR,
-         P_EMAIL           VARCHAR,
-         P_PASSWORD        VARCHAR
-       )
-       RETURNS TABLE (
-         USER_ID UUID,
-         EMAIL VARCHAR,
-         ROLE VARCHAR,
-         BUSINESS_ID UUID
-       )
-       LANGUAGE plpgsql
-       AS $$
-       BEGIN
-         -- Lógica del registro
-       END;
-       $$;
-       ```
-5. **`05-Primary Keys.sql`**:
-   - Define las claves primarias de las tablas en la base de datos.
-   - Ejemplo:
-     ```sql
-     ALTER TABLE USERS ADD CONSTRAINT PK_USERS PRIMARY KEY (ID);
-     ALTER TABLE BUSINESSES ADD CONSTRAINT PK_BUSINESSES PRIMARY KEY (ID);
-     ALTER TABLE AUTH_AUDIT_LOGS ADD CONSTRAINT PK_AUTH_AUDIT_LOGS PRIMARY KEY (ID);
-     ```
-6 . **`06-Foreign Keys.sql`**:
-   - Establece las claves foráneas entre las tablas, definiendo las relaciones entre ellas.
-   - Ejemplo:
-     ```sql
-     ALTER TABLE USERS ADD CONSTRAINT FK_USERS_BUSINESS_ID
-     FOREIGN KEY (BUSINESS_ID) REFERENCES BUSINESSES(ID)
-     ON DELETE RESTRICT;
-
-     ALTER TABLE AUTH_AUDIT_LOGS ADD CONSTRAINT FK_AUTH_LOGS_USER_ID
-     FOREIGN KEY (USER_ID) REFERENCES USERS(ID)
-     ON DELETE CASCADE;
-     ```
-7. **`07-Indexes/`**:
-   - Contiene los índices definidos para optimizar el acceso a datos.
-   - Archivos destacados:
-     - **`IDX_USERS_EMAIL.sql`**:
-       ```sql
-       CREATE INDEX IDX_USERS_EMAIL ON USERS(EMAIL);
-       ```
-     - **`IDX_USERS_BUSINESS_ID.sql`**:
-       ```sql
-       CREATE INDEX IDX_USERS_BUSINESS_ID ON USERS(BUSINESS_ID);
-       ```
-     - **`IDX_AUDIT_LOGS.sql`**:
-       ```sql
-       CREATE INDEX IDX_AUDIT_USER_ID ON AUTH_AUDIT_LOGS(USER_ID);
-       ```
-
----
-8. **`07-CargasIniciales.sql`**:
-   - Se utiliza para insertar datos iniciales en las tablas de la base de datos.
-   - Ejemplo:
-     ```sql
-     INSERT INTO BUSINESSES (ID, NAME, PHONE, IS_ACTIVE, CREATED_AT)
-     VALUES ('11111111-1111-1111-1111-111111111111', 'Panadería San José', '+50688887777', TRUE, NOW());
-
-     INSERT INTO USERS (ID, EMAIL, PASSWORD_HASH, ROLE, BUSINESS_ID, IS_ACTIVE, CREATED_AT)
-     VALUES ('22222222-2222-2222-2222-222222222222', 'admin@panaderia.com', crypt('password123', gen_salt('bf')), 'ADMIN', '11111111-1111-1111-1111-111111111111', TRUE, NOW());
-     ```
-
-## Uso de los Schemas y su Importancia
-
-### ¿Qué son los Schemas?
-
-Los esquemas permiten dividir y categorizar los elementos de una base de datos como tablas, índices y funciones, mejorando la modularidad y la seguridad del sistema. Cada esquema puede entenderse como un "espacio de nombres" para evitar la colisión de objetos y establecer límites claros en cuanto a permisos.
-
-### Beneficios de Usar Schemas
-
-1. **Organización**: Facilitan la separación lógica de los objetos según su funcionalidad.
-2. **Mantenibilidad**: Permiten a distintos equipos trabajar en secciones específicas sin conflictos.
-3. **Seguridad**: Posibilitan la asignación de permisos granular, como restringir el acceso a funciones sensibles.
-4. **Escalabilidad**: Aseguran una estructura que se adapta al crecimiento del sistema.
-
-### Ejemplo de Separación por Schemas
-
-```sql
-CREATE SCHEMA auth_proc; -- Esquema para lógica de autenticación
-CREATE SCHEMA audit;     -- Esquema para registros de auditoría
-```
-
-Luego, cada objeto se asigna explícitamente al esquema correspondiente:
-
-```sql
--- Crear tabla en esquema audit
-CREATE TABLE audit.AUTH_AUDIT_LOGS (
-  ID BIGSERIAL PRIMARY KEY,
-  USER_ID UUID,
-  ACTION VARCHAR(50) NOT NULL,
-  TIMESTAMP TIMESTAMP NOT NULL DEFAULT NOW()
-);
-
--- Crear función en esquema auth_proc
-CREATE OR REPLACE FUNCTION auth_proc.SP_AUTH_LOGIN() RETURNS VOID AS $$
-BEGIN
-  -- Lógica
-END;
-$$;
-```
-
----
-##...
+    <section class="panel">
+      <h2>Resumen</h2>
+      <p>La arquitectura DBS estandariza la separación por dominios y procedimientos, favorece mantenibilidad, claridad y seguridad. Todas las llamadas se realizan con nombres calificados por schema, alineando la práctica con la lógica del negocio de SINPEConectaCR.</p>
+    </section>
+  </div>
+</div>
