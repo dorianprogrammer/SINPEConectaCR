@@ -306,7 +306,7 @@ ON CONFLICT (email) DO NOTHING;
 - Nombres en inglés y `snake_case` para columnas.
 - Constraints cerca de definiciones de tablas para legibilidad.
 - Índices explícitos para consultas frecuentes.
-- En producción, considerar roles por microservicio (mínimo privilegio).
+- En producción, considera roles por microservicio (mínimo privilegio).
 
 ---
 
