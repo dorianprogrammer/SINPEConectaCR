@@ -1,251 +1,62 @@
-<!--
-  Database Structure (DBS) — SINPEConectaCR
-  Styled with inline HTML + CSS for a clean, readable doc.
--->
+# Database Structure (DBS) · SINPEConectaCR
 
-<style>
-  :root {
-    --bg: #0b0f1a;
-    --panel: #111827;
-    --text: #e5e7eb;
-    --muted: #94a3b8;
-    --primary: #22d3ee;
-    --accent: #a78bfa;
-    --green: #34d399;
-    --red: #f87171;
-    --border: #1f2937;
-  }
-  .page {
-    background: var(--bg);
-    color: var(--text);
-    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
-    padding: 24px;
-    line-height: 1.6;
-  }
-  .container {
-    max-width: 1100px;
-    margin: 0 auto;
-  }
-  .hero {
-    background: radial-gradient(1000px 400px at 10% 0%, rgba(167,139,250,0.20), transparent 60%),
-                radial-gradient(1000px 400px at 90% 0%, rgba(34,211,238,0.20), transparent 60%),
-                linear-gradient(180deg, rgba(17,24,39,0.80), rgba(17,24,39,0.60));
-    border: 1px solid var(--border);
-    border-radius: 18px;
-    padding: 28px;
-    box-shadow: 0 0 30px rgba(167,139,250,0.08);
-    margin-bottom: 20px;
-  }
-  .title {
-    font-size: 28px;
-    font-weight: 800;
-    letter-spacing: 0.2px;
-  }
-  .subtitle {
-    font-size: 14px;
-    color: var(--muted);
-    margin-top: 4px;
-  }
-  .grid {
-    display: grid;
-    gap: 16px;
-  }
-  .two-cols {
-    grid-template-columns: 1fr 1fr;
-  }
-  .panel {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 18px;
-  }
-  .panel h2 {
-    font-size: 18px;
-    font-weight: 700;
-    margin: 0 0 10px 0;
-  }
-  .panel h3 {
-    font-size: 16px;
-    font-weight: 700;
-    margin: 18px 0 6px 0;
-  }
-  .panel p, .panel li, .panel code, .panel pre {
-    font-size: 14px;
-  }
-  .muted {
-    color: var(--muted);
-  }
-  .badge {
-    display: inline-block;
-    font-size: 12px;
-    padding: 4px 8px;
-    border-radius: 999px;
-    border: 1px solid var(--border);
-    background: linear-gradient(180deg, rgba(31,41,55,0.8), rgba(17,24,39,0.8));
-    color: var(--text);
-    margin-right: 6px;
-  }
-  .authors {
-    display: grid;
-    gap: 14px;
-  }
-  .author-card {
-    display: grid;
-    grid-template-columns: 80px 1fr;
-    gap: 14px;
-    align-items: center;
-    background: linear-gradient(180deg, rgba(31,41,55,0.6), rgba(17,24,39,0.6));
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 14px;
-  }
-  .avatar {
-    width: 72px;
-    height: 72px;
-    border-radius: 14px;
-    background: radial-gradient(100px 80px at 50% 50%, rgba(34,211,238,0.25), rgba(167,139,250,0.15));
-    border: 1px solid var(--border);
-  }
-  .author-name {
-    font-weight: 700;
-    font-size: 16px;
-  }
-  .author-role {
-    font-size: 12px;
-    color: var(--muted);
-  }
-  .codeblock {
-    background: #0b1220;
-    border: 1px solid #162034;
-    border-radius: 12px;
-    padding: 12px;
-    overflow: auto;
-  }
-  .kbd {
-    font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-    font-size: 12px;
-  }
-  .list-dot li::marker { color: var(--accent); }
-  @media (max-width: 820px) {
-    .two-cols { grid-template-columns: 1fr; }
-    .author-card { grid-template-columns: 64px 1fr; }
-    .avatar { width: 64px; height: 64px; }
-  }
-</style>
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-14%2B-336791?style=for-the-badge&logo=postgresql&logoColor=white)
+![Schemas](https://img.shields.io/badge/Schemas-Domain_Driven-8e44ad?style=for-the-badge)
+![Stored Procedures](https://img.shields.io/badge/Stored_Procedures-Qualified_Names-27ae60?style=for-the-badge)
+![Multi-tenant](https://img.shields.io/badge/Multi--Tenant-Core-3498db?style=for-the-badge)
 
-<div class="page">
-  <div class="container">
-    <section class="hero">
-      <div class="title">Database Structure (DBS) · SINPEConectaCR</div>
-      <div class="subtitle">Arquitectura con separación por dominios y procedimientos, llamadas calificadas por schema</div>
-      <div style="margin-top:10px">
-        <span class="badge">PostgreSQL</span>
-        <span class="badge">Schemas</span>
-        <span class="badge">Stored Procedures</span>
-        <span class="badge">Multi-tenant</span>
-        <span class="badge">DBS</span>
-      </div>
-    </section>
+> Arquitectura de base de datos orientada a dominios y procedimientos, con llamadas calificadas por schema.  
+> Fecha: 2026-01-24
 
-    <section class="panel">
-      <h2>Authors</h2>
-      <div class="authors">
-        <div class="author-card">
-          <div class="avatar" aria-hidden="true"></div>
-          <div>
-            <div class="author-name">👑 Dorian Rodríguez Ruiz</div>
-            <div class="author-role">Autor principal · Software Developer · IA aplicada a PYMES (Costa Rica)</div>
-            <div class="muted" style="margin-top:6px">
-              <span class="badge">IA & Arquitectura</span>
-              <span class="badge">Project Lead</span>
-              <span class="badge">WhatsApp API</span>
-            </div>
-          </div>
-        </div>
+## Author
 
-        <div class="author-card">
-          <div class="avatar" aria-hidden="true"></div>
-          <div>
-            <div class="author-name">💻 David Artavia Arias</div>
-            <div class="author-role">Coautor · Full Stack Developer · Arquitectura de Datos & Sistemas (Costa Rica)</div>
-            <div class="muted" style="margin-top:6px">
-              <span class="badge">DB Architecture</span>
-              <span class="badge">Backend Services</span>
-              <span class="badge">Frontend Dev</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="muted" style="margin-top:10px">Fecha: 2026-01-24</div>
-    </section>
+- 💻 David Artavia Arias  
+  Full Stack Developer · Arquitectura de Datos & Sistemas · Costa Rica  
+  ![DB Architecture](https://img.shields.io/badge/DB_Architecture-e74c3c?style=flat-square)
+  ![Backend Services](https://img.shields.io/badge/Backend_Services-2ecc71?style=flat-square)
+  ![Frontend Dev](https://img.shields.io/badge/Frontend_Dev-f39c12?style=flat-square)
 
-    <section class="grid two-cols">
-      <div class="panel">
-        <h2>Principios de Arquitectura</h2>
-        <ul class="list-dot">
-          <li>Separación por dominios con <span class="kbd">schemas</span> dedicados.</li>
-          <li>Procedimientos almacenados organizados por esquema de lógica (<span class="kbd">auth_proc</span>, <span class="kbd">crm_proc</span>).</li>
-          <li>Llamadas desde la app usando nombres con <em>schema calificado</em> (sin <span class="kbd">search_path</span>, sin wrappers en <span class="kbd">public</span>).</li>
-          <li>Archivos SQL pequeños por responsabilidad: tablas, SPs, índices, datos iniciales.</li>
-        </ul>
-      </div>
+---
 
-      <div class="panel">
-        <h2>Orden de Provisionamiento</h2>
-        <ol>
-          <li>02-Schemas.sql</li>
-          <li>03-Tables/*</li>
-          <li>04-Procedures/*</li>
-          <li>07-Indexes/*</li>
-          <li>08-Initial_Loads.sql</li>
-        </ol>
-        <p class="muted">Nota: 01-Create_DB.sql es informativo; la creación de la base suele ejecutarse fuera de migraciones.</p>
-      </div>
-    </section>
+## Overview
 
-    <section class="panel">
-      <h2>Schemas</h2>
-      <div class="grid two-cols">
-        <div>
-          <h3>Dominio</h3>
-          <ul class="list-dot">
-            <li><strong>core</strong>: businesses, users</li>
-            <li><strong>crm</strong>: contacts, orders, order_items</li>
-            <li><strong>payments</strong>: ingestión/normalización SINPE (futuro)</li>
-            <li><strong>ia</strong>: OCR/LLM (futuro)</li>
-            <li><strong>audit</strong>: auditoría y logs</li>
-            <li><strong>util</strong>: auxiliares</li>
-            <li><strong>repo</strong>: vistas y reportería</li>
-            <li><strong>secu</strong>: datos sensibles (opcional)</li>
-          </ul>
-        </div>
-        <div>
-          <h3>Procedimientos</h3>
-          <ul class="list-dot">
-            <li><strong>auth_proc</strong>: SPs de autenticación</li>
-            <li><strong>crm_proc</strong>: SPs del CRM</li>
-          </ul>
-        </div>
-      </div>
-      <div class="codeblock">
-        <pre><code>CREATE EXTENSION IF NOT EXISTS pgcrypto;
-CREATE SCHEMA IF NOT EXISTS core;
-CREATE SCHEMA IF NOT EXISTS crm;
-CREATE SCHEMA IF NOT EXISTS payments;
-CREATE SCHEMA IF NOT EXISTS ia;
-CREATE SCHEMA IF NOT EXISTS audit;
-CREATE SCHEMA IF NOT EXISTS util;
-CREATE SCHEMA IF NOT EXISTS repo;
-CREATE SCHEMA IF NOT EXISTS auth_proc;
-CREATE SCHEMA IF NOT EXISTS crm_proc;
-CREATE SCHEMA IF NOT EXISTS secu;</code></pre>
-      </div>
-    </section>
+La arquitectura DBS organiza la base de datos de SINPEConectaCR con:
+- Separación por **schemas de dominio** (entidades centrales, CRM, auditoría, etc.)
+- **Schemas de procedimientos** por dominio (auth_proc, crm_proc)
+- **Archivos SQL pequeños** y focalizados (tablas, SPs, índices, datos iniciales)
+- Invocación desde la aplicación con **nombres calificados por schema** (sin search_path, sin wrappers en public)
 
-    <section class="panel">
-      <h2>Estructura de Carpetas (DBS)</h2>
-      <div class="codeblock">
-        <pre><code>DBS/
+Esto favorece escalabilidad, seguridad y claridad para equipos que trabajan en distintos módulos del sistema.
+
+---
+
+## Schemas
+
+Dominios:
+- core — businesses, users
+- crm — contacts, orders, order_items
+- payments — ingestión/normalización SINPE (futuro)
+- ia — OCR/LLM y extracción de comprobantes (futuro)
+- audit — auditoría y logs
+- util — auxiliares y tablas de soporte
+- repo — vistas y reportería (históricos, ETLs, logs)
+- secu — opcional; datos sensibles con controles reforzados
+
+Procedimientos:
+- auth_proc — stored procedures de autenticación
+- crm_proc — stored procedures del CRM
+
+> Decisión clave: las llamadas se hacen siempre con **nombres calificados por schema** (ej. `auth_proc.SP_AUTH_LOGIN`).  
+> No se depende de `search_path`. No se usan wrappers en `public`.
+
+---
+
+## Folder Layout (DBS)
+
+Todos los SQL se organizan bajo la carpeta “DBS” (Database Structure), con nombres y jerarquía en inglés:
+
+```
+DBS/
 └── Base Product/
     ├── 01-Create_DB.sql
     ├── 02-Schemas.sql
@@ -277,23 +88,65 @@ CREATE SCHEMA IF NOT EXISTS secu;</code></pre>
     │   ├── AUDIT_IDX_AUTH_LOGS.sql
     │   ├── CRM_IDX_CONTACTS.sql
     │   └── CRM_IDX_ORDERS.sql
-    ├── 08-Initial_Loads.sql</code></pre>
-      </div>
-    </section>
+    ├── 08-Initial_Loads.sql
+```
 
-    <section class="panel">
-      <h2>Tablas · ejemplos</h2>
-      <h3>core.businesses</h3>
-      <div class="codeblock"><pre><code>CREATE TABLE IF NOT EXISTS core.businesses (
+---
+
+## Provisioning Order
+
+Para preparar una base limpia:
+
+1. 02-Schemas.sql  
+2. 03-Tables/*  
+3. 04-Procedures/*  
+4. 07-Indexes/*  
+5. 08-Initial_Loads.sql
+
+Nota: 01-Create_DB.sql es informativo; la creación de la base suele ejecutarse fuera del pipeline de migraciones.
+
+---
+
+## Schema Creation (example)
+
+```sql
+CREATE EXTENSION IF NOT EXISTS pgcrypto;
+
+-- Domain schemas
+CREATE SCHEMA IF NOT EXISTS core;
+CREATE SCHEMA IF NOT EXISTS crm;
+CREATE SCHEMA IF NOT EXISTS payments;
+CREATE SCHEMA IF NOT EXISTS ia;
+CREATE SCHEMA IF NOT EXISTS audit;
+CREATE SCHEMA IF NOT EXISTS util;
+CREATE SCHEMA IF NOT EXISTS repo;
+
+-- Procedure schemas
+CREATE SCHEMA IF NOT EXISTS auth_proc;
+CREATE SCHEMA IF NOT EXISTS crm_proc;
+
+-- Optional sensitive schema
+CREATE SCHEMA IF NOT EXISTS secu;
+```
+
+---
+
+## Tables (examples)
+
+```sql
+-- core.businesses
+CREATE TABLE IF NOT EXISTS core.businesses (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   name VARCHAR(150) NOT NULL,
   phone VARCHAR(30) NOT NULL,
   is_active BOOLEAN NOT NULL DEFAULT TRUE,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
-);</code></pre></div>
+);
+```
 
-      <h3>core.users</h3>
-      <div class="codeblock"><pre><code>CREATE TABLE IF NOT EXISTS core.users (
+```sql
+-- core.users
+CREATE TABLE IF NOT EXISTS core.users (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   email VARCHAR(150) NOT NULL UNIQUE,
   password_hash TEXT NOT NULL,
@@ -305,10 +158,12 @@ CREATE SCHEMA IF NOT EXISTS secu;</code></pre>
     FOREIGN KEY (business_id)
     REFERENCES core.businesses(id)
     ON DELETE RESTRICT
-);</code></pre></div>
+);
+```
 
-      <h3>audit.auth_audit_logs</h3>
-      <div class="codeblock"><pre><code>CREATE TABLE IF NOT EXISTS audit.auth_audit_logs (
+```sql
+-- audit.auth_audit_logs
+CREATE TABLE IF NOT EXISTS audit.auth_audit_logs (
   id BIGSERIAL PRIMARY KEY,
   user_id UUID,
   business_id UUID,
@@ -316,15 +171,26 @@ CREATE SCHEMA IF NOT EXISTS secu;</code></pre>
   ip_address VARCHAR(45),
   user_agent TEXT,
   created_at TIMESTAMP NOT NULL DEFAULT NOW()
-);</code></pre></div>
-    </section>
+);
+```
 
-    <section class="panel">
-      <h2>Procedimientos · ejemplos</h2>
-      <h3>auth_proc.SP_AUTH_REGISTER</h3>
-      <div class="codeblock"><pre><code>-- =============================================
+---
+
+## Stored Procedures (examples)
+
+Todos los SPs incluyen encabezado:
+
+```
+-- =============================================
 -- Autor: Dorian Rodriguez
 -- Fecha: 2026-01-24
+-- Descripción: <breve descripción del SP>
+-- =============================================
+```
+
+Autenticación:
+```sql
+-- auth_proc.SP_AUTH_REGISTER
 -- Descripción: Registra negocio y usuario, audita y retorna USER_ID, EMAIL, ROLE, BUSINESS_ID
 CREATE OR REPLACE FUNCTION auth_proc.SP_AUTH_REGISTER(
   P_BUSINESS_NAME   VARCHAR,
@@ -336,57 +202,115 @@ CREATE OR REPLACE FUNCTION auth_proc.SP_AUTH_REGISTER(
 )
 RETURNS TABLE (USER_ID UUID, EMAIL VARCHAR, ROLE VARCHAR, BUSINESS_ID UUID)
 LANGUAGE plpgsql
-AS $$ ... $$;</code></pre></div>
+AS $$ ... $$;
+```
 
-      <h3>auth_proc.SP_AUTH_LOGIN</h3>
-      <div class="codeblock"><pre><code>-- =============================================
--- Autor: Dorian Rodriguez
--- Fecha: 2026-01-24
+```sql
+-- auth_proc.SP_AUTH_LOGIN
 -- Descripción: Valida credenciales, audita éxito/fallo y retorna USER_ID, EMAIL, ROLE, BUSINESS_ID
 CREATE OR REPLACE FUNCTION auth_proc.SP_AUTH_LOGIN(
-  P_EMAIL VARCHAR,
-  P_PASSWORD VARCHAR,
-  P_IP VARCHAR DEFAULT NULL,
-  P_USER_AGENT TEXT DEFAULT NULL
+  P_EMAIL       VARCHAR,
+  P_PASSWORD    VARCHAR,
+  P_IP          VARCHAR DEFAULT NULL,
+  P_USER_AGENT  TEXT DEFAULT NULL
 )
 RETURNS TABLE (USER_ID UUID, EMAIL VARCHAR, ROLE VARCHAR, BUSINESS_ID UUID)
 LANGUAGE plpgsql
-AS $$ ... $$;</code></pre></div>
-      <p class="muted">Todos los SPs del CRM siguen el mismo patrón en <span class="kbd">crm_proc</span> con nombres calificados.</p>
-    </section>
+AS $$ ... $$;
+```
 
-    <section class="panel">
-      <h2>Índices · ejemplos</h2>
-      <div class="grid two-cols">
-        <div class="codeblock"><pre><code>CREATE INDEX IF NOT EXISTS idx_users_email ON core.users(email);
-CREATE INDEX IF NOT EXISTS idx_users_business_id ON core.users(business_id);</code></pre></div>
-        <div class="codeblock"><pre><code>CREATE INDEX IF NOT EXISTS idx_audit_business_id ON audit.auth_audit_logs(business_id);
-CREATE INDEX IF NOT EXISTS idx_audit_user_id ON audit.auth_audit_logs(user_id);</code></pre></div>
-      </div>
-    </section>
+CRM:
+```sql
+-- crm_proc.SP_CRM_ORDER_CREATE
+-- Descripción: Crea una orden validando que el contacto pertenezca al negocio
+CREATE OR REPLACE FUNCTION crm_proc.SP_CRM_ORDER_CREATE(
+  P_BUSINESS_ID UUID,
+  P_CONTACT_ID UUID,
+  P_ORDER_CODE VARCHAR,
+  P_TOTAL_CRC INT,
+  P_STATUS VARCHAR DEFAULT 'PENDING',
+  P_DUE_DATE DATE DEFAULT NULL,
+  P_NOTE TEXT DEFAULT NULL
+)
+RETURNS TABLE (
+  ID UUID, BUSINESS_ID UUID, CONTACT_ID UUID, ORDER_CODE VARCHAR,
+  TOTAL_CRC INT, STATUS VARCHAR, DUE_DATE DATE, NOTE TEXT,
+  CREATED_AT TIMESTAMPTZ, UPDATED_AT TIMESTAMPTZ
+)
+LANGUAGE plpgsql
+AS $$ ... $$;
+```
 
-    <section class="panel">
-      <h2>Integración con la Aplicación</h2>
-      <ul class="list-dot">
-        <li>Invocar SPs con nombre calificado por schema (ej. <span class="kbd">auth_proc.SP_AUTH_LOGIN</span>).</li>
-        <li>Evitar <span class="kbd">search_path</span> y wrappers en <span class="kbd">public</span>.</li>
-        <li>Separación por responsabilidad: <span class="kbd">core</span> (entidades), <span class="kbd">crm</span> (dominio CRM), <span class="kbd">audit</span> (trazabilidad), <span class="kbd">auth_proc/crm_proc</span> (procedimientos).</li>
-      </ul>
-    </section>
+---
 
-    <section class="panel">
-      <h2>Buenas Prácticas</h2>
-      <ul class="list-dot">
-        <li>Convenciones de nombres claras (English, snake_case para columnas).</li>
-        <li>Constraints cercanos a las definiciones de tablas para legibilidad.</li>
-        <li>Índices explícitos por consultas frecuentes y claves foráneas con intención.</li>
-        <li>Para producción: considerar roles por microservicio (mínimo privilegio).</li>
-      </ul>
-    </section>
+## Indexes (examples)
 
-    <section class="panel">
-      <h2>Resumen</h2>
-      <p>La arquitectura DBS estandariza la separación por dominios y procedimientos, favorece mantenibilidad, claridad y seguridad. Todas las llamadas se realizan con nombres calificados por schema, alineando la práctica con la lógica del negocio de SINPEConectaCR.</p>
-    </section>
-  </div>
-</div>
+```sql
+-- core.users
+CREATE INDEX IF NOT EXISTS idx_users_email ON core.users(email);
+CREATE INDEX IF NOT EXISTS idx_users_business_id ON core.users(business_id);
+```
+
+```sql
+-- audit.auth_audit_logs
+CREATE INDEX IF NOT EXISTS idx_audit_business_id ON audit.auth_audit_logs(business_id);
+CREATE INDEX IF NOT EXISTS idx_audit_user_id ON audit.auth_audit_logs(user_id);
+```
+
+```sql
+-- crm.*
+CREATE INDEX IF NOT EXISTS idx_contacts_business ON crm.contacts(business_id);
+CREATE INDEX IF NOT EXISTS idx_orders_business_status ON crm.orders(business_id, status);
+CREATE INDEX IF NOT EXISTS idx_orders_contact ON crm.orders(contact_id);
+```
+
+---
+
+## Initial Loads (example)
+
+```sql
+INSERT INTO core.businesses (id, name, phone, is_active, created_at)
+VALUES ('11111111-1111-1111-1111-111111111111', 'Panadería San José', '+50688887777', TRUE, NOW())
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO core.users (id, email, password_hash, role, business_id, is_active, created_at)
+VALUES (
+  '22222222-2222-2222-2222-222222222222',
+  'admin@panaderia.com',
+  '$2b$10$eImiTXuWVxfM37uY4JANjQexamplehashxxxxxxxxxxxxxxxxxxxxx',
+  'PYME',
+  '11111111-1111-1111-1111-111111111111',
+  TRUE,
+  NOW()
+)
+ON CONFLICT (email) DO NOTHING;
+
+-- Contactos y órdenes de ejemplo bajo crm.*
+-- Entrada de auditoría de ejemplo bajo audit.auth_audit_logs
+```
+
+---
+
+## Application Integration
+
+- Invocar SPs con nombres calificados por schema:
+  - Autenticación: `auth_proc.SP_AUTH_REGISTER`, `auth_proc.SP_AUTH_LOGIN`
+  - CRM: `crm_proc.SP_CRM_*`
+- Evitar `search_path` y evitar wrappers en `public`.
+- Mantener separación por responsabilidad: `core` (entidades), `crm` (dominio), `audit` (trazabilidad), `auth_proc/crm_proc` (procedimientos).
+
+---
+
+## Best Practices
+
+- Nombres en inglés y `snake_case` para columnas.
+- Constraints cerca de definiciones de tablas para legibilidad.
+- Índices explícitos para consultas frecuentes.
+- En producción, considerar roles por microservicio (mínimo privilegio).
+
+---
+
+## Summary
+
+La arquitectura DBS estandariza la separación por dominios y procedimientos, mejora mantenibilidad, claridad y seguridad.  
+Todas las llamadas se realizan con nombres calificados por schema, alineando la práctica con la lógica de negocio de SINPEConectaCR.
