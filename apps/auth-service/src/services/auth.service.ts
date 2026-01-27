@@ -17,11 +17,9 @@ export const register = async (
 
   const user = result.rows[0];
 
-  console.log('user', user);
-
   const payload: JwtPayload = {
     sub: user.user_id,
-    businessId: user.business_id,
+    businessId: user.business_id ?? null,
     role: user.role,
   };
 
@@ -52,7 +50,7 @@ export const login = async (data: LoginDTO, context?: { ip?: string; userAgent?:
 
   const payload: JwtPayload = {
     sub: user.user_id,
-    businessId: user.business_id,
+    businessId: user.business_id ?? null,
     role: user.role,
   };
 

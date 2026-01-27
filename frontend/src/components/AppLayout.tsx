@@ -9,7 +9,9 @@ const navItem = (active: boolean) =>
 export function AppLayout() {
   const nav = useNavigate();
   const { pathname } = useLocation();
-  const { logout } = useAuth();
+  const { logout, user } = useAuth();
+
+  const isSuper = user?.role === 'SUPER';
 
   const onLogout = () => {
     logout();
@@ -23,19 +25,35 @@ export function AppLayout() {
           <aside className="rounded-2xl border border-zinc-800 bg-zinc-900/30 p-4">
             <div className="mb-4">
               <div className="text-lg font-semibold">SINPEConectaCR</div>
-              <div className="text-xs text-zinc-400">CRM Base</div>
+              <div className="text-xs text-zinc-400">{isSuper ? 'Platform Admin' : 'CRM Base'}</div>
             </div>
 
             <nav className="grid gap-1">
-              <Link className={navItem(pathname.startsWith('/dashboard'))} to="/dashboard">
-                Dashboard
-              </Link>
-              <Link className={navItem(pathname.startsWith('/contacts'))} to="/contacts">
-                Contacts
-              </Link>
-              <Link className={navItem(pathname.startsWith('/orders'))} to="/orders">
-                Orders
-              </Link>
+              {isSuper ? (
+                <>
+                  <Link className={navItem(pathname.startsWith('/platform'))} to="/platform">
+                    Businesses
+                  </Link>
+                  <Link
+                    className={navItem(pathname.startsWith('/platform/create'))}
+                    to="/platform/create"
+                  >
+                    Create Business
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link className={navItem(pathname.startsWith('/dashboard'))} to="/dashboard">
+                    Dashboard
+                  </Link>
+                  <Link className={navItem(pathname.startsWith('/contacts'))} to="/contacts">
+                    Contacts
+                  </Link>
+                  <Link className={navItem(pathname.startsWith('/orders'))} to="/orders">
+                    Orders
+                  </Link>
+                </>
+              )}
             </nav>
 
             <button

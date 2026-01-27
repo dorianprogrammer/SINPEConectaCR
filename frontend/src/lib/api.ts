@@ -1,11 +1,12 @@
-import { tokenStorage } from './storage';
+import { sessionStorage } from './storage';
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 
 type Json = Record<string, any>;
 
 async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
-  const token = tokenStorage.get();
+  const session = sessionStorage.get();
+  const token = session?.token;
 
   const headers: HeadersInit = {
     ...(options.headers ?? {}),

@@ -16,6 +16,6 @@ declare global {
 
 export interface JwtPayload {
   sub: string;
-  businessId: string;
+  businessId?: string | null;
   role: UserRole;
 }

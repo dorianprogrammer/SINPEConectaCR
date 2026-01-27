@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/auth.context';
 
 export default function Login() {
-  const nav = useNavigate();
+  const navigate = useNavigate();
   const { login } = useAuth();
 
   const [email, setEmail] = useState('');
@@ -11,13 +11,13 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
-  const onSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const onSubmit = async () => {
     setError(null);
     setLoading(true);
     try {
-      await login(email, password);
-      nav('/dashboard');
+      const loggedUser = await login(email, password);
+      if (loggedUser.role === 'SUPER') navigate('/platform');
+      else navigate('/app');
     } catch (err: any) {
       setError(err.message ?? 'LOGIN_FAILED');
     } finally {
@@ -34,7 +34,7 @@ export default function Login() {
             <div className="text-sm text-zinc-400">Sign in to dashboard</div>
           </div>
 
-          <form onSubmit={onSubmit} className="grid gap-3">
+          <div className="grid gap-3">
             <div className="grid gap-1">
               <label className="text-xs text-zinc-400">Email</label>
               <input
@@ -64,11 +64,12 @@ export default function Login() {
 
             <button
               disabled={loading}
+              onClick={onSubmit}
               className="mt-2 w-full rounded-xl bg-zinc-100 px-3 py-2 text-sm font-semibold text-zinc-900 hover:bg-white disabled:opacity-60"
             >
               {loading ? '...' : 'Login'}
             </button>
-          </form>
+          </div>
 
           <div className="mt-6 text-xs text-zinc-500">
             Tip: Use your gateway auth endpoint <span className="font-mono">/auth/login</span>
