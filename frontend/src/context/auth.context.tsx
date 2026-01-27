@@ -1,54 +1,78 @@
 import React, { createContext, useContext, useMemo, useState } from 'react';
-import { tokenStorage } from '../lib/storage';
 import { api } from '../lib/api';
+import { sessionStorage } from '../lib/storage';
+
+type Role = 'SUPER' | 'ADMIN' | 'PYME';
+
+type User = {
+  id: string;
+  email: string;
+  role: Role;
+  businessId: string | null;
+};
 
 type AuthState = {
   token: string | null;
+  user: User | null;
 };
 
 type LoginResponse = {
   token: string;
-  // optionally: user, businessId, role, etc
+  user: User;
 };
 
 type AuthCtx = {
   token: string | null;
+  user: User | null;
   isAuthed: boolean;
-  login: (email: string, password: string) => Promise<void>;
+  isSuper: boolean;
+  login: (email: string, password: string) => Promise<User>;
   logout: () => void;
 };
 
 const Ctx = createContext<AuthCtx | null>(null);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [state, setState] = useState<AuthState>(() => ({ token: tokenStorage.get() }));
+  const [state, setState] = useState<AuthState>(() => {
+    const session = sessionStorage.get();
+    return session ?? { token: null, user: null };
+  });
 
   const login = async (email: string, password: string) => {
     const resp = await api.post<LoginResponse>('/auth/login', { email, password });
-    tokenStorage.set(resp.token);
-    setState({ token: resp.token });
+
+    const session = {
+      token: resp.token,
+      user: resp.user,
+    };
+
+    sessionStorage.set(session);
+    setState(session);
+    return resp.user;
   };
 
   const logout = () => {
-    tokenStorage.clear();
-    setState({ token: null });
+    sessionStorage.clear();
+    setState({ token: null, user: null });
   };
 
   const value = useMemo<AuthCtx>(
     () => ({
       token: state.token,
+      user: state.user,
       isAuthed: Boolean(state.token),
+      isSuper: state.user?.role === 'SUPER',
       login,
       logout,
     }),
-    [state.token],
+    [state],
   );
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
 
-export const useAuth = () => {
+export function useAuth(): AuthCtx {
   const ctx = useContext(Ctx);
-  if (!ctx) throw new Error('AuthProvider missing');
+  if (!ctx) throw new Error('useAuth must be used within <AuthProvider>');
   return ctx;
-};
+}
